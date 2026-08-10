@@ -2,6 +2,7 @@ name: بناء ونشر على Cloudflare Pages
 
 on:
   push:
+    branches: ['**'] # كل الفروع، دون وسوم (tags)
   workflow_dispatch:
 
 permissions:
