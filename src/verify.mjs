@@ -6,7 +6,8 @@
  * 1) كل رابط في data/packages.json موجود في site/index.html (والعكس: لا روابط زائدة).
  * 2) عدد الروابط = 42 رابط منتج + رابطا قسم.
  * 3) الودجت المولَّد مطابق بنيويًا للتصميم المرجعي design_handoff_baqat/reference-design.html
- *    (بعد تجاهل المسافات والتعليقات) — أي فرق يعني انحرافًا عن التصميم المعتمد.
+ *    (بعد تجاهل المسافات والتعليقات، وتقنيع الأسعار والروابط لأنها بيانات متغيرة بطبيعتها).
+ *    أي فرق بعد ذلك = انحراف عن التصميم المعتمد من العميل.
  */
 import { readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -14,7 +15,13 @@ import { dirname, join } from 'node:path';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const data = JSON.parse(readFileSync(join(root, 'data', 'packages.json'), 'utf8'));
-const page = readFileSync(join(root, 'site', 'index.html'), 'utf8');
+
+const pagePath = join(root, 'site', 'index.html');
+if (!existsSync(pagePath)) {
+  console.error('✗ site/index.html غير موجود — شغّل «npm run build» أولًا (أو «npm run check»).');
+  process.exit(1);
+}
+const page = readFileSync(pagePath, 'utf8');
 
 let failures = 0;
 const fail = (msg) => {
@@ -72,9 +79,19 @@ if (!existsSync(refPath)) {
 } else {
   const ref = readFileSync(refPath, 'utf8');
 
+  // الأسعار والروابط بيانات، لا تصميم: تعديلها في packages.json مشروع ولا يعني انحرافًا
+  // عن التصميم المعتمد، فتُقنَّع قبل المقارنة. كل ما عداها (البنية، الـCSS، الأيقونات،
+  // النصوص العربية المعتمدة) يبقى تحت مقارنة صارمة.
+  const maskData = (html) =>
+    html
+      .replace(/(href|src)="[^"]*"/g, '$1="#"')
+      .replace(/(<div class="rw-price">)\d+/g, '$1N')
+      .replace(/(<div class="rw-badge">[^<]*?)\d+/g, '$1N')
+      .replace(/(اتصال )\d+/g, '$1N');
+
   // تُحذف التعليقات أولًا لأن المرجع يبدأ بتعليق يذكر <div id="rw-baqat"> نصًّا
   const normalize = (html) =>
-    html
+    maskData(html)
       .replace(/<!--[\s\S]*?-->/g, '') // تجاهل التعليقات
       .replace(/>\s+</g, '><') // تجاهل المسافات بين الوسوم
       .replace(/\s+/g, ' ') // توحيد المسافات داخل النص
@@ -91,7 +108,7 @@ if (!existsSync(refPath)) {
   const b = widgetOf(ref);
 
   if (a === b) {
-    pass('الودجت المولَّد مطابق حرفيًا للتصميم المرجعي (تجاهل المسافات والتعليقات)');
+    pass('الودجت المولَّد مطابق للتصميم المرجعي (بتقنيع الأسعار والروابط فقط)');
   } else {
     let i = 0;
     while (i < a.length && i < b.length && a[i] === b[i]) i++;

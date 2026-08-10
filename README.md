@@ -19,15 +19,17 @@ npm run serve
 
 معاينة محلية على `http://localhost:4173`.
 
-```bash
-npm run deploy
-```
+## النشر
 
-بناء + تحقق + نشر على Cloudflare Pages (مشروع `futurepioneers-baqat`).
+تلقائي: كل `git push` يشغّل بناءً وتحققًا ثم ينشر على Cloudflare Pages.
+`main` ← [futurepioneers-baqat.pages.dev](https://futurepioneers-baqat.pages.dev) ·
+أي فرع آخر ← رابط معاينة باسم الفرع. **فشل التحقق يوقف النشر.**
+
+للنشر اليدوي من الجهاز: `npm run deploy`.
 
 ## تعديل الأسعار أو الروابط
 
-عدّل `data/packages.json` **فقط**، ثم `npm run check`. ملفات `site/` مولَّدة ولا تُحرَّر يدويًا.
+عدّل `data/packages.json` **فقط** ثم ادفع. ملفات `site/` مولَّدة (خارج Git) ولا تُحرَّر يدويًا.
 
 ## البنية
 
@@ -37,8 +39,9 @@ npm run deploy
 | `src/styles.css` | CSS التصميم المعتمد |
 | `src/build.mjs` | مولّد الصفحة |
 | `src/verify.mjs` | فحوصات ما قبل النشر |
-| `site/index.html` | الصفحة المنشورة (مولَّدة) |
-| `site/embed.html` | مقتطف للصق داخل محرر HTML في سلة (مولَّد) |
+| `.github/workflows/deploy.yml` | البناء والتحقق والنشر التلقائي |
+| `site/index.html` | الصفحة المنشورة (مولَّدة، خارج Git) |
+| `site/embed.html` | مقتطف للصق داخل محرر HTML في سلة (مولَّد، خارج Git) |
 | `design_handoff_baqat/` | ملفات التسليم التصميمي الأصلية |
 
 تفاصيل أوفى وقيود التصميم في [CLAUDE.md](CLAUDE.md).

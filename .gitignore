@@ -1,5 +1,9 @@
 node_modules/
 .wrangler/
+
+# مخرجات مولَّدة — يبنيها الـCI عند كل دفع، ووجودها في Git يعني خطر عرض أسعار قديمة
+site/
+
 *.log
 .DS_Store
 Thumbs.db

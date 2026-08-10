@@ -1,0 +1,50 @@
+name: بناء ونشر على Cloudflare Pages
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # المشروع بلا اعتماديات — البناء يعتمد على وحدات Node المدمجة فقط
+      - name: بناء الصفحة والتحقق منها
+        run: npm run check
+
+      - name: التأكد من وجود مفتاح Cloudflare
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$TOKEN" ] || [ -z "$ACCOUNT" ]; then
+            echo "::error::ينقص سرّ CLOUDFLARE_API_TOKEN أو CLOUDFLARE_ACCOUNT_ID في إعدادات المستودع (Settings → Secrets and variables → Actions)."
+            exit 1
+          fi
+
+      # الدفع إلى main = نشر إنتاجي على futurepioneers-baqat.pages.dev
+      # الدفع إلى أي فرع آخر = رابط معاينة مستقل بنفس اسم الفرع
+      - name: النشر
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          WRANGLER_SEND_METRICS: 'false'
+        run: >
+          npx --yes wrangler@4 pages deploy site
+          --project-name=futurepioneers-baqat
+          --branch="${{ github.ref_name }}"
+          --commit-hash="${{ github.sha }}"
+          --commit-dirty=true
