@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@600;700;800&amp;family=Almarai:wght@400;700;800&amp;display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#fff}
+a{color:#941249}a:hover{color:#D60859}
+@media (max-width:900px){.g3{grid-template-columns:repeat(2,1fr) !important}}
+@media (max-width:560px){.g3{grid-template-columns:1fr !important}.ctrlrow{flex-direction:column !important;align-items:stretch !important}.ctrllabel{width:auto !important}}
+</style>
+</helmet>
+<div dir="rtl" style="direction:rtl;font-family:'Almarai','Baloo Bhaijaan 2',sans-serif;color:#2A1B22;background:#fff">
+  <div style="background:#FBF2E7;border-radius:22px;overflow:hidden">
+    <div style="height:10px;background:linear-gradient(90deg,#941249,#D60859 45%,#E8BD4B)"></div>
+    <div style="max-width:960px;margin:0 auto;padding:28px 20px 4px;text-align:center">
+      <img src="https://cdn.salla.sa/zvRpzp/stores/logos/BGGdLHdolsCv1vs9hGSy3jUFT1xukKBeQX3qjPPn.png" alt="مركز رواد المستقبل للأطفال" style="height:72px;width:auto;max-width:70vw;object-fit:contain">
+      <h2 style="margin:10px 0 0;font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:clamp(26px,5vw,36px);color:#D60859;line-height:1.25">دليل أسعار الاشتراكات</h2>
+      <div style="margin-top:4px;font-size:clamp(16px,3vw,20px);font-weight:700;color:#4A323E">باقات مرنة تكبر مع احتياج طفلك</div>
+    </div>
+    <div data-screen-label="أدوات الاختيار" style="position:sticky;top:0;z-index:20;background:#FBF2E7;box-shadow:0 8px 18px rgba(148,18,73,.06);padding:16px 20px 14px">
+      <div style="max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:12px">
+        <div class="ctrlrow" style="display:flex;align-items:center;gap:12px">
+          <div class="ctrllabel" style="width:64px;font-size:17px;font-weight:800;color:#4A323E;flex-shrink:0">الفترة</div>
+          <div style="flex:1;display:flex;gap:8px;background:#fff;border:2px solid #EAD9C6;border-radius:999px;padding:6px">
+            <div onClick="{{ pickMorning }}" style="{{ mStyle }}">
+              <svg viewBox="0 0 48 48" width="24" height="24"><circle cx="24" cy="24" r="10" fill="#E8BD4B"></circle><g stroke="#E8BD4B" stroke-width="3" stroke-linecap="round"><line x1="24" y1="4" x2="24" y2="10"></line><line x1="24" y1="38" x2="24" y2="44"></line><line x1="4" y1="24" x2="10" y2="24"></line><line x1="38" y1="24" x2="44" y2="24"></line><line x1="9.9" y1="9.9" x2="14.1" y2="14.1"></line><line x1="33.9" y1="33.9" x2="38.1" y2="38.1"></line><line x1="9.9" y1="38.1" x2="14.1" y2="33.9"></line><line x1="33.9" y1="14.1" x2="38.1" y2="9.9"></line></g></svg>
+              الفترة الصباحية
+            </div>
+            <div onClick="{{ pickEvening }}" style="{{ eStyle }}">
+              <svg viewBox="0 0 48 48" width="24" height="24"><path d="M38 30 A16 16 0 1 1 20 7 A13.5 13.5 0 0 0 38 30 Z" fill="#E8BD4B"></path></svg>
+              الفترة المسائية
+            </div>
+          </div>
+        </div>
+        <div class="ctrlrow" style="display:flex;align-items:center;gap:12px">
+          <div class="ctrllabel" style="width:64px;font-size:17px;font-weight:800;color:#4A323E;flex-shrink:0">المدة</div>
+          <div style="flex:1;display:flex;gap:8px;background:#fff;border:2px solid #EAD9C6;border-radius:999px;padding:6px">
+            <sc-for list="{{ durSeg }}" as="t" hint-placeholder-count="4">
+              <div onClick="{{ t.pick }}" style="{{ t.style }}">{{ t.label }}</div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div data-screen-label="البطاقات" style="max-width:960px;margin:0 auto;padding:8px 20px 0">
+      <div style="text-align:center;margin-top:18px;font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:clamp(21px,4vw,26px);color:#941249">{{ periodTitle }}</div>
+      <div class="g3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px">
+        <sc-for list="{{ cards }}" as="c" hint-placeholder-count="6">
+          <div style="background:#fff;border:2px solid #F0DECC;border-radius:22px;padding:24px 18px 18px;display:flex;flex-direction:column;align-items:center;gap:12px;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-3px);box-shadow:0 12px 26px rgba(148,18,73,.12)">
+            <div style="font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:27px;color:#D60859">{{ c.title }}</div>
+            <div style="width:44px;height:3px;border-radius:2px;background:#E8BD4B"></div>
+            <div style="display:flex;align-items:baseline;gap:6px;font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:46px;color:#2A1B22;line-height:1">{{ c.price }} <span style="font-family:'Almarai',sans-serif;font-size:17px;font-weight:700;color:#4A323E">ريال</span></div>
+            <div style="font-size:17px;font-weight:700;color:#4A323E;margin-top:-6px">{{ c.cap }}</div>
+            <a href="{{ c.url }}" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;width:100%;min-height:58px;background:#D60859;color:#fff;border-radius:999px;font-weight:800;font-size:20px;text-decoration:none;margin-top:2px;transition:background .2s" style-hover="background:#941249">اشترك الآن</a>
+          </div>
+        </sc-for>
+      </div>
+      <div style="text-align:center;margin-top:20px;font-size:16px;font-weight:700"><a href="{{ catUrl }}" target="_blank" rel="noopener" style="color:#941249;text-decoration:underline">{{ catLabel }}</a></div>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin:18px auto 0">
+        <div style="background:#fff;border:1.5px solid #EAD9C6;border-radius:999px;padding:10px 18px;font-size:15px;font-weight:700;color:#941249">التقسيط متاح عبر تابي وتمارا</div>
+        <div style="background:#fff;border:1.5px solid #EAD9C6;border-radius:999px;padding:10px 18px;font-size:15px;font-weight:700;color:#941249">اشتراك مرن بدون تجديد تلقائي</div>
+      </div>
+    </div>
+    <div style="margin-top:36px;background:#fff;border-top:1.5px solid #F0DECC;padding:28px 18px 24px;text-align:center">
+      <div style="font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:22px;color:#941249">تواصل معنا</div>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:14px">
+        <a href="https://wa.me/966591044434" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;min-height:56px;padding:0 26px;border-radius:999px;font-weight:800;font-size:18px;text-decoration:none;background:#D60859;color:#fff;box-shadow:0 6px 16px rgba(214,8,89,.25)">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2Zm5 13.6c-.2.6-1.2 1.2-1.7 1.2-.4.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.6-2.6-1.1-4.3-3.8-4.4-4-.1-.2-1-1.4-1-2.6s.6-1.8.9-2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.4l.9 2.1c.1.2.1.4 0 .6l-.4.6c-.1.2-.3.4-.1.7.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.7-.1l1-1.1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.3.1.2.1.6-.1 1.2Z"></path></svg>
+          واتساب
+        </a>
+        <a href="tel:0591044434" style="display:inline-flex;align-items:center;gap:8px;min-height:56px;padding:0 26px;border-radius:999px;font-weight:800;font-size:18px;text-decoration:none;border:2px solid #941249;color:#941249">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#941249" stroke-width="2" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2Z"></path></svg>
+          اتصال 0591044434
+        </a>
+        <a href="https://www.google.com/maps/place/%D9%85%D8%B1%D9%83%D8%B2+%D8%B1%D9%88%D8%A7%D8%AF+%D8%A7%D9%84%D9%85%D8%B3%D8%AA%D9%82%D8%A8%D9%84+%D9%84%D9%84%D8%A3%D8%B7%D9%81%D8%A7%D9%84+%5B%D8%AD%D8%B6%D8%A7%D9%86%D8%A9+%D9%88%D8%B1%D9%88%D8%B6%D8%A9+%D9%84%D9%84%D8%A3%D8%B7%D9%81%D8%A7%D9%84%5D%E2%80%AD/data=!4m2!3m1!1s0x0:0xbcb4cf8fa4fc6a11?sa=X&amp;ved=1t:2428&amp;ictx=111" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;min-height:56px;padding:0 26px;border-radius:999px;font-weight:800;font-size:18px;text-decoration:none;border:2px solid #E8BD4B;color:#941249">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#941249" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          موقعنا على الخريطة
+        </a>
+      </div>
+      <div style="margin-top:16px;font-size:16px;color:#4A323E;line-height:1.9">المدينة المنورة — حي شرق المدينة — خلف قصر ذكرى<br>الدوام من الساعة 6:45 صباحاً إلى 9 مساءً</div>
+      <div style="margin-top:10px;font-size:14px;font-weight:700;color:#941249">مركز رواد المستقبل للأطفال</div>
+    </div>
+    <div style="height:10px;background:linear-gradient(90deg,#E8BD4B,#D60859 55%,#941249)"></div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultPeriod&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;m&quot;,&quot;options&quot;:[&quot;m&quot;,&quot;e&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;الافتراضي&quot;},&quot;defaultDur&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;day&quot;,&quot;options&quot;:[&quot;day&quot;,&quot;week&quot;,&quot;month&quot;,&quot;term&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;الافتراضي&quot;}}">
+class Component extends DCLogic {
+  state = { period: this.props.defaultPeriod ?? 'm', dur: this.props.defaultDur ?? 'day' };
+  data() {
+    const M = 'https://futurepioneers.net/الفترة-الصباحية-اشتراك-';
+    const E = 'https://futurepioneers.net/الفترة-المسائية-اشتراك-';
+    const mk = (pre, termWord, rows) => rows.map(r => ({
+      label: r[0] + ' ساعات',
+      prices: {
+        day:   { price: r[1], url: pre + 'باليوم-' + r[0] + '-ساعات/' + r[5] },
+        week:  { price: r[2], url: pre + 'اسبوعي-' + r[0] + '-ساعات/' + r[6] },
+        month: { price: r[3], url: pre + 'شهري-' + r[0] + '-ساعات/' + r[7] },
+        term:  { price: r[4], url: pre + termWord + '-' + r[0] + '-ساعات/' + r[8] }
+      }
+    }));
+    return {
+      m: {
+        cat: 'https://futurepioneers.net/الفترة-الصباحية/c1643999108',
+        catLabel: 'تصفح كل باقات الفترة الصباحية في المتجر ↗',
+        hour: { price: 25, url: M + 'ساعة/p1492487661' },
+        packs: mk(M, 'ترم', [
+          [4, 55, 250, 650, 2100, 'p1302063314', 'p2115944490', 'p2080731704', 'p374527772'],
+          [5, 65, 300, 750, 2500, 'p223865717', 'p1234702622', 'p911338442', 'p257233496'],
+          [6, 75, 350, 850, 2700, 'p196600398', 'p210545771', 'p803227861', 'p1455594916'],
+          [8, 90, 425, 1050, 3300, 'p446229078', 'p1131882304', 'p628135376', 'p507386272'],
+          [10, 125, 600, 1250, 4000, 'p411081636', 'p1098901846', 'p1234319397', 'p1638630828']
+        ])
+      },
+      e: {
+        cat: 'https://futurepioneers.net/الفترة-المسائية/c193898983',
+        catLabel: 'تصفح كل باقات الفترة المسائية في المتجر ↗',
+        hour: { price: 25, url: E + 'بالساعة/p1353339257' },
+        packs: mk(E, 'بالترم', [
+          [4, 55, 250, 650, 2100, 'p1277255754', 'p1899522467', 'p1176008124', 'p1140860802'],
+          [5, 65, 300, 750, 2500, 'p984425561', 'p1548360311', 'p2042174346', 'p1826145680'],
+          [6, 75, 350, 850, 2700, 'p35303333', 'p2080135281', 'p361248237', 'p955539406'],
+          [8, 90, 425, 1050, 3300, 'p2074676384', 'p665290355', 'p284846309', 'p1272793046'],
+          [10, 125, 600, 1250, 4000, 'p405819811', 'p147714639', 'p1657239526', 'p323666898']
+        ])
+      }
+    };
+  }
+  seg(active) {
+    return Object.assign({
+      flex: '1 1 0', minWidth: 0, minHeight: '56px', borderRadius: '999px',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+      fontWeight: 800, fontSize: 'clamp(15px,4.2vw,19px)', cursor: 'pointer', transition: 'background .2s,color .2s', textAlign: 'center'
+    }, active
+      ? { background: '#D60859', color: '#fff', boxShadow: '0 4px 14px rgba(214,8,89,.25)' }
+      : { color: '#941249' });
+  }
+  renderVals() {
+    const s = this.state, D = this.data(), p = D[s.period];
+    const DUR = [['day', 'اليوم', 'في اليوم'], ['week', 'الأسبوع', 'في الأسبوع'], ['month', 'الشهر', 'في الشهر'], ['term', 'الترم', 'في الترم']];
+    const cap = DUR.find(d => d[0] === s.dur)[2];
+    return {
+      pickMorning: () => this.setState({ period: 'm' }),
+      pickEvening: () => this.setState({ period: 'e' }),
+      mStyle: this.seg(s.period === 'm'),
+      eStyle: this.seg(s.period === 'e'),
+      durSeg: DUR.map(d => ({ label: d[1], pick: () => this.setState({ dur: d[0] }), style: this.seg(s.dur === d[0]) })),
+      cards: [
+        ...(s.dur === 'day' ? [{ title: 'ساعة واحدة', price: p.hour.price, cap: 'للساعة الواحدة', url: p.hour.url }] : []),
+        ...p.packs.map(k => ({ title: k.label, price: k.prices[s.dur].price, cap, url: k.prices[s.dur].url }))
+      ],
+      catUrl: p.cat, catLabel: p.catLabel,
+      periodTitle: s.period === 'm' ? 'باقات الفترة الصباحية' : 'باقات الفترة المسائية'
+    };
+  }
+}
+</script>
+</body>
+</html>

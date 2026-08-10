@@ -1,11 +1,16 @@
 /**
- * يولّد صفحة الباقات الثابتة من data/packages.json + src/styles.css
+ * يولّد صفحة الباقات الثابتة (الإصدار 2) من data/packages.json + src/styles.css
  *
  *   node src/build.mjs
  *
  * المخرجات:
  *   site/index.html  صفحة كاملة مستقلة (هي التي تُنشر على Cloudflare Pages)
  *   site/embed.html  مقتطف الودجت فقط (للصق في محرر HTML داخل سلة)
+ *
+ * تصميم v2: شاشة واحدة بلا تنقّل — لوحة تحكم ثابتة (الفترة + المدة) والبطاقات تتحدث فورًا.
+ * كل التفاعل CSS فقط عبر radio inputs مخفية:
+ *   rw-p-m / rw-p-e            (name=rw-period، الافتراضي: صباحية)
+ *   rw-d-day/week/month/term   (name=rw-dur،    الافتراضي: اليوم)
  *
  * كل الأسعار والروابط والنصوص تأتي من data/packages.json — لا تُحرَّر يدويًا في site/.
  */
@@ -30,12 +35,6 @@ const caption = (key) => `في ${data.durations[key]}`;
 
 /* ---------- أيقونات SVG (منقولة حرفيًا من التصميم المرجعي) ---------- */
 
-const STAR_PATH = 'M12 0 L15 9 L24 12 L15 15 L12 24 L9 15 L0 12 L9 9 Z';
-
-const star = (size, fill, style = '') =>
-  `<svg viewBox="0 0 24 24" width="${size}" height="${size}"${style ? ` style="${style}"` : ''}>` +
-  `<path d="${STAR_PATH}" fill="${fill}"></path></svg>`;
-
 const sun = (size) =>
   `<svg viewBox="0 0 48 48" width="${size}" height="${size}">` +
   `<circle cx="24" cy="24" r="10" fill="#E8BD4B"></circle>` +
@@ -46,40 +45,36 @@ const sun = (size) =>
   `<line x1="9.9" y1="38.1" x2="14.1" y2="33.9"></line><line x1="33.9" y1="14.1" x2="38.1" y2="9.9"></line>` +
   `</g></svg>`;
 
-// الهلال: نسخة البطاقة الكبيرة فيها بريق إضافي، ونسخة البانر بدونه
-const moon = (size, sparkle) =>
+const moon = (size) =>
   `<svg viewBox="0 0 48 48" width="${size}" height="${size}">` +
-  `<path d="M38 30 A16 16 0 1 1 20 7 A13.5 13.5 0 0 0 38 30 Z" fill="#E8BD4B"></path>` +
-  (sparkle
-    ? `<path d="M34 10 L35.4 14 L39.4 15.4 L35.4 16.8 L34 20.8 L32.6 16.8 L28.6 15.4 L32.6 14 Z" fill="#FBF2E7"></path>`
-    : '') +
-  `</svg>`;
+  `<path d="M38 30 A16 16 0 1 1 20 7 A13.5 13.5 0 0 0 38 30 Z" fill="#E8BD4B"></path></svg>`;
 
 const ICON_WA =
-  `<svg viewBox="0 0 24 24" width="18" height="18" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2Zm5 13.6c-.2.6-1.2 1.2-1.7 1.2-.4.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.6-2.6-1.1-4.3-3.8-4.4-4-.1-.2-1-1.4-1-2.6s.6-1.8.9-2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.4l.9 2.1c.1.2.1.4 0 .6l-.4.6c-.1.2-.3.4-.1.7.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.7-.1l1-1.1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.3.1.2.1.6-.1 1.2Z"></path></svg>`;
+  `<svg viewBox="0 0 24 24" width="20" height="20" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2Zm5 13.6c-.2.6-1.2 1.2-1.7 1.2-.4.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.6-2.6-1.1-4.3-3.8-4.4-4-.1-.2-1-1.4-1-2.6s.6-1.8.9-2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.4l.9 2.1c.1.2.1.4 0 .6l-.4.6c-.1.2-.3.4-.1.7.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.7-.1l1-1.1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.3.1.2.1.6-.1 1.2Z"></path></svg>`;
 
 const ICON_TEL =
-  `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#941249" stroke-width="2" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2Z"></path></svg>`;
+  `<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#941249" stroke-width="2" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2Z"></path></svg>`;
 
 const ICON_MAP =
-  `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#941249" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>`;
+  `<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#941249" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>`;
 
-/* ---------- بطاقات الباقات ---------- */
+/* ---------- البطاقات ---------- */
 
-// بطاقة «ساعة واحدة» — سعر واحد ظاهر في كل التبويبات
+// «ساعة واحدة»: البطاقة كاملة ملفوفة بـ rw-v-day فتظهر مع «اليوم» فقط.
+// display:contents على الغلاف يجعل البطاقة نفسها هي عنصر الشبكة.
 const hourCard = (period, periodName) => `
-      <div class="rw-card">
-        <div class="rw-h">${esc(period.hour.label)}</div>
-        <div class="rw-bar"></div>
-        <div class="rw-va">
-          <div class="rw-price">${period.hour.price} <span>${esc(data.currency)}</span></div>
-          <div class="rw-cap">للساعة الواحدة</div>
-          <!-- ${periodName}: ${esc(period.hour.label)} -->
-          <a class="rw-btn" href="${esc(period.hour.url)}">اشترك الآن</a>
-        </div>
-      </div>`;
+        <div class="rw-v rw-v-day">
+          <div class="rw-card">
+            <div class="rw-h">${esc(period.hour.label)}</div>
+            <div class="rw-bar"></div>
+            <div class="rw-price">${period.hour.price} <span>${esc(data.currency)}</span></div>
+            <div class="rw-cap">للساعة الواحدة</div>
+            <!-- ${periodName}: ${esc(period.hour.label)} -->
+            <a class="rw-btn" href="${esc(period.hour.url)}">اشترك الآن</a>
+          </div>
+        </div>`;
 
-// بطاقة باقة ساعات — 4 نسخ سعر، تظهر منها واحدة حسب التبويب المختار
+// بطاقة باقة ساعات — 4 نسخ سعر، تظهر منها واحدة حسب المدة المختارة
 const packageCard = (pkg, periodName) => {
   const variants = DURATIONS.map((key) => {
     const p = pkg.prices[key];
@@ -91,45 +86,27 @@ const packageCard = (pkg, periodName) => {
       `<a class="rw-btn" href="${esc(p.url)}">اشترك الآن</a>` +
       `</div>`
     );
-  }).join('\n        ');
+  }).join('\n          ');
 
   return `
-      <div class="rw-card">
-        <div class="rw-h">${esc(pkg.label)}</div>
-        <div class="rw-bar"></div>
-        ${variants}
-      </div>`;
+        <div class="rw-card">
+          <div class="rw-h">${esc(pkg.label)}</div>
+          <div class="rw-bar"></div>
+          ${variants}
+        </div>`;
 };
 
-/* ---------- قسم الفترة ---------- */
+/* ---------- كتلة الفترة (عنوان + شبكة + رابط القسم) ---------- */
 
-const periodSection = ({ key, period, periodName, icon, banClass, secClass, radioPrefix }) => `
-  <!-- ===================== ${esc(period.label)} ===================== -->
-  <section class="rw-sec ${secClass}">
-    <div class="rw-ban ${banClass}">
-      <div class="rw-bt">
-        ${icon}
-        ${esc(period.label)}
-      </div>
-      <label class="rw-back" for="rw-p0">تغيير الفترة</label>
-    </div>
-${DURATIONS.map(
-  (d, i) =>
-    `    <input class="rw-hide" type="radio" name="rw-${radioPrefix === 'm' ? 'dm' : 'de'}" id="rw-${radioPrefix}-${d}"${i === 0 ? ' checked' : ''}>`
-).join('\n')}
-    <div class="rw-tabs">
-${DURATIONS.map(
-  (d) => `      <label class="rw-t-${d}" for="rw-${radioPrefix}-${d}">${esc(data.durations[d])}</label>`
-).join('\n')}
-    </div>
-    <div class="rw-grid">${hourCard(period, periodName)}${period.packages
+const periodBlock = ({ period, periodName, tag }) => `
+      <div class="rw-ptitle rw-ptitle-${tag}">باقات ${esc(period.label)}</div>
+      <div class="rw-grid rw-grid-${tag}">${hourCard(period, periodName)}${period.packages
   .map((pkg) => packageCard(pkg, periodName))
   .join('')}
-    </div>
-    <div class="rw-all"><a href="${esc(period.categoryUrl)}">تصفح كل باقات ${esc(
+      </div>
+      <div class="rw-all rw-all-${tag}"><a href="${esc(period.categoryUrl)}">تصفح كل باقات ${esc(
   period.label
-)} في المتجر ↗</a></div>
-  </section>`;
+)} في المتجر ↗</a></div>`;
 
 /* ---------- الودجت الكامل ---------- */
 
@@ -141,64 +118,49 @@ const widget = `<div id="rw-baqat">
 ${styles}
 </style>
 
-<input class="rw-hide" type="radio" name="rw-period" id="rw-p0" checked>
-<input class="rw-hide" type="radio" name="rw-period" id="rw-pm">
-<input class="rw-hide" type="radio" name="rw-period" id="rw-pe">
+<input class="rw-hide" type="radio" name="rw-period" id="rw-p-m" checked>
+<input class="rw-hide" type="radio" name="rw-period" id="rw-p-e">
+<input class="rw-hide" type="radio" name="rw-dur" id="rw-d-day" checked>
+<input class="rw-hide" type="radio" name="rw-dur" id="rw-d-week">
+<input class="rw-hide" type="radio" name="rw-dur" id="rw-d-month">
+<input class="rw-hide" type="radio" name="rw-dur" id="rw-d-term">
 
 <div class="rw-wrap">
   <div class="rw-ribbon"></div>
+
   <div class="rw-hero">
-    ${star(22, '#E8BD4B', 'position:absolute;top:44px;right:8%;opacity:.9')}
-    ${star(26, '#D60859', 'position:absolute;top:60px;left:9%;opacity:.9')}
     <img src="${esc(data.logo)}" alt="${esc(data.brand)}">
     <h2>دليل أسعار الاشتراكات</h2>
-    <div class="rw-sub">باقات مرنة تناسب احتياج طفلك وأسرتك</div>
-    <div class="rw-badge-row">
-      ${star(16, '#E8BD4B')}
-      <div class="rw-badge">الساعه ${data.hourlyRate} ${esc(data.currency)}</div>
-      ${star(16, '#E8BD4B')}
+    <div class="rw-sub">باقات مرنة تكبر مع احتياج طفلك</div>
+  </div>
+
+  <div class="rw-ctrl">
+    <div class="rw-ctrl-in">
+      <div class="rw-ctrlrow">
+        <div class="rw-ctrllabel">الفترة</div>
+        <div class="rw-seg">
+          <label class="rw-s-m" for="rw-p-m">${sun(24)}${esc(data.periods.morning.label)}</label>
+          <label class="rw-s-e" for="rw-p-e">${moon(24)}${esc(data.periods.evening.label)}</label>
+        </div>
+      </div>
+      <div class="rw-ctrlrow">
+        <div class="rw-ctrllabel">المدة</div>
+        <div class="rw-seg">
+${DURATIONS.map(
+  (d) => `          <label class="rw-s-${d}" for="rw-d-${d}">${esc(data.durations[d])}</label>`
+).join('\n')}
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="rw-landing">
-    <h3>اختر الفترة المناسبة</h3>
-    <div class="rw-note">نفس الباقات متوفرة في الفترتين — اضغط على الفترة لعرضها مرتبة</div>
-    <div class="rw-pergrid">
-      <label class="rw-per rw-per-m" for="rw-pm">
-        ${sun(52)}
-        <span class="rw-pt">${esc(data.periods.morning.label)}</span>
-        <span class="rw-ps">باقات اليوم والأسبوع والشهر والترم</span>
-        <span class="rw-pa">عرض الباقات ←</span>
-      </label>
-      <label class="rw-per rw-per-e" for="rw-pe">
-        ${moon(52, true)}
-        <span class="rw-pt">${esc(data.periods.evening.label)}</span>
-        <span class="rw-ps">باقات اليوم والأسبوع والشهر والترم</span>
-        <span class="rw-pa">عرض الباقات ←</span>
-      </label>
-    </div>
+  <div class="rw-main">
+${periodBlock({ period: data.periods.morning, periodName: 'صباحي', tag: 'm' })}
+${periodBlock({ period: data.periods.evening, periodName: 'مسائي', tag: 'e' })}
     <div class="rw-chips">
 ${data.notes.map((n) => `      <div class="rw-chip">${esc(n)}</div>`).join('\n')}
     </div>
   </div>
-${periodSection({
-  key: 'morning',
-  period: data.periods.morning,
-  periodName: 'صباحي',
-  icon: sun(34),
-  banClass: 'rw-ban-m',
-  secClass: 'rw-sec-m',
-  radioPrefix: 'm',
-})}
-${periodSection({
-  key: 'evening',
-  period: data.periods.evening,
-  periodName: 'مسائي',
-  icon: moon(34, false),
-  banClass: 'rw-ban-e',
-  secClass: 'rw-sec-e',
-  radioPrefix: 'e',
-})}
 
   <div class="rw-foot">
     <div class="rw-ft">تواصل معنا</div>
@@ -226,7 +188,7 @@ ${periodSection({
 /* ---------- المخرجات ---------- */
 
 const title = `باقات ${data.brand} — دليل أسعار الاشتراكات`;
-const description = `باقات اشتراكات ${data.brand}: الفترة الصباحية والمسائية، باليوم والأسبوع والشهر والترم — الساعه ${data.hourlyRate} ${data.currency}.`;
+const description = `باقات اشتراكات ${data.brand}: اختر الفترة والمدة واشترك مباشرة — باقات مرنة تكبر مع احتياج طفلك.`;
 
 const page = `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -262,5 +224,6 @@ writeFileSync(join(root, 'site', 'index.html'), page, 'utf8');
 writeFileSync(join(root, 'site', 'embed.html'), embed, 'utf8');
 
 const links = (page.match(/href="https:\/\/futurepioneers\.net[^"]*"/g) || []).length;
-console.log(`✓ site/index.html  (${page.length} حرف، ${links} رابط منتج/قسم من سلة)`);
+const cards = (page.match(/class="rw-card"/g) || []).length;
+console.log(`✓ site/index.html  (${page.length} حرف، ${links} رابط سلة، ${cards} بطاقة)`);
 console.log(`✓ site/embed.html  (${embed.length} حرف)`);
