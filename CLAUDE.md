@@ -66,8 +66,10 @@ design_handoff_baqat/       ملفات التسليم الأصلية (مرجع �
 - **الحسابات**: GitHub `futurepioneers2030/futurepioneers-baqat` (عام) ·
   Cloudflare `futurepioneers2030@gmail.com` · مشروع Pages `futurepioneers-baqat` (رفع مباشر).
 - **أسرار المستودع المطلوبة** (Settings → Secrets and variables → Actions):
-  `CLOUDFLARE_API_TOKEN` (صلاحية Cloudflare Pages: Edit) و`CLOUDFLARE_ACCOUNT_ID`.
+  `CLOUDFLARE_API_TOKEN` (صلاحية Cloudflare Pages: Edit) و`CLOUDFLARE_ACCOUNT_ID`. كلاهما مضبوط.
 - عند تدوير المفتاح: أنشئ رمزًا جديدًا من لوحة Cloudflare وحدّث السرّ — لا تضع الرمز في أي ملف.
+- متابعة التشغيلات: `gh run list` · إعادة تشغيل يدوية: `gh workflow run deploy.yml --ref main`.
+  تشغيلان متزامنان على الفرع نفسه؟ يُلغى الأقدم تلقائيًا (`cancel-in-progress`) ويبقى الأحدث.
 
 ## ملاحظة عند المعاينة داخل متصفح غير مرئي
 
