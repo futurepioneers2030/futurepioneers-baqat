@@ -1,0 +1,14 @@
+{
+  "name": "futurepioneers-baqat",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "صفحة باقات اشتراكات مركز رواد المستقبل للأطفال — موقع ثابت مولَّد من data/packages.json",
+  "scripts": {
+    "build": "node src/build.mjs",
+    "verify": "node src/verify.mjs",
+    "check": "node src/build.mjs && node src/verify.mjs",
+    "serve": "node src/serve.mjs",
+    "deploy": "node src/build.mjs && node src/verify.mjs && wrangler pages deploy site --project-name=futurepioneers-baqat --branch=main --commit-dirty=true"
+  }
+}

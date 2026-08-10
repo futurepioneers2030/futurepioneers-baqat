@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "baqat",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["src/serve.mjs", "4173"],
+      "port": 4173
+    }
+  ]
+}
