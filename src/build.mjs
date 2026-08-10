@@ -1,5 +1,5 @@
 /**
- * يولّد صفحة الباقات الثابتة (الإصدار 2) من data/packages.json + src/styles.css
+ * يولّد صفحة الباقات الثابتة (الإصدار 3 — مرشد الباقات) من data/packages.json
  *
  *   node src/build.mjs
  *
@@ -7,10 +7,11 @@
  *   site/index.html  صفحة كاملة مستقلة (هي التي تُنشر على Cloudflare Pages)
  *   site/embed.html  مقتطف الودجت فقط (للصق في محرر HTML داخل سلة)
  *
- * تصميم v2: شاشة واحدة بلا تنقّل — لوحة تحكم ثابتة (الفترة + المدة) والبطاقات تتحدث فورًا.
- * كل التفاعل CSS فقط عبر radio inputs مخفية:
- *   rw-p-m / rw-p-e            (name=rw-period، الافتراضي: صباحية)
- *   rw-d-day/week/month/term   (name=rw-dur،    الافتراضي: اليوم)
+ * البنية على طبقتين:
+ *   1) أساس ثابت بلا JavaScript — جدول الأسعار الكامل داخل #rw-fallback
+ *      (radio inputs مخفية + `:checked`). هذا ما يراه من عطّل JS أو ما يظهر إن فشل السكربت.
+ *   2) تحسين تدريجي — src/chat.js يبني تجربة المحادثة في #rw-chat ويخفي الأساس،
+ *      ويقرأ الأسعار من <script type="application/json" id="rw-data"> المضمَّن وقت البناء.
  *
  * كل الأسعار والروابط والنصوص تأتي من data/packages.json — لا تُحرَّر يدويًا في site/.
  */
@@ -21,6 +22,12 @@ import { dirname, join } from 'node:path';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const data = JSON.parse(readFileSync(join(root, 'data', 'packages.json'), 'utf8'));
 const styles = readFileSync(join(root, 'src', 'styles.css'), 'utf8').trimEnd();
+const chatJs = readFileSync(join(root, 'src', 'chat.js'), 'utf8').trimEnd();
+
+// السكربت يُضمَّن حرفيًا داخل وسم سكربت: تسلسل الإغلاق يقطع الصفحة،
+// و«<!--» يُدخل المحلّل في حالة script-data-escaped فيبتلع الإغلاق التالي.
+if (/<\/script/i.test(chatJs)) throw new Error('src/chat.js يحتوي تسلسل إغلاق سكربت — لا يمكن تضمينه inline');
+if (chatJs.includes('<!--')) throw new Error('src/chat.js يحتوي <!-- — يكسر تحليل الوسم');
 
 /* ---------- أدوات ---------- */
 
@@ -29,6 +36,7 @@ const esc = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 const DURATIONS = ['day', 'week', 'month', 'term'];
+const HOUR_CAP = 'للساعة الواحدة';
 
 // وصف المدة داخل البطاقة: «في اليوم» / «في الأسبوع» / …
 const caption = (key) => `في ${data.durations[key]}`;
@@ -58,7 +66,39 @@ const ICON_TEL =
 const ICON_MAP =
   `<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#941249" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>`;
 
-/* ---------- البطاقات ---------- */
+/* ---------- بيانات المحادثة (تُقرأ بالـJS وقت التشغيل) ---------- */
+
+const chatData = {
+  logo: data.logo,
+  currency: data.currency,
+  wa: data.contact.whatsapp,
+  hourLabel: data.periods.morning.hour.label,
+  hourCap: HOUR_CAP,
+  durations: DURATIONS.map((d) => [d, data.durations[d], caption(d)]),
+  periods: Object.fromEntries(
+    [
+      ['m', data.periods.morning],
+      ['e', data.periods.evening],
+    ].map(([tag, p]) => [
+      tag,
+      {
+        label: p.label,
+        hour: { price: p.hour.price, url: p.hour.url },
+        packs: p.packages.map((pkg) => ({
+          label: pkg.label,
+          prices: Object.fromEntries(
+            DURATIONS.map((d) => [d, { price: pkg.prices[d].price, url: pkg.prices[d].url }])
+          ),
+        })),
+      },
+    ])
+  ),
+};
+
+// داخل <script type="application/json"> يكفي منع تسلسل </script — وتهريب < يغطيه
+const chatJson = JSON.stringify(chatData).replace(/</g, '\\u003c');
+
+/* ---------- بطاقات جدول الأسعار الثابت ---------- */
 
 // «ساعة واحدة»: البطاقة كاملة ملفوفة بـ rw-v-day فتظهر مع «اليوم» فقط.
 // display:contents على الغلاف يجعل البطاقة نفسها هي عنصر الشبكة.
@@ -68,13 +108,12 @@ const hourCard = (period, periodName) => `
             <div class="rw-h">${esc(period.hour.label)}</div>
             <div class="rw-bar"></div>
             <div class="rw-price">${period.hour.price} <span>${esc(data.currency)}</span></div>
-            <div class="rw-cap">للساعة الواحدة</div>
+            <div class="rw-cap">${esc(HOUR_CAP)}</div>
             <!-- ${periodName}: ${esc(period.hour.label)} -->
-            <a class="rw-btn" href="${esc(period.hour.url)}">اشترك الآن</a>
+            <a class="rw-btn" href="${esc(period.hour.url)}" target="_blank" rel="noopener">اشترك الآن</a>
           </div>
         </div>`;
 
-// بطاقة باقة ساعات — 4 نسخ سعر، تظهر منها واحدة حسب المدة المختارة
 const packageCard = (pkg, periodName) => {
   const variants = DURATIONS.map((key) => {
     const p = pkg.prices[key];
@@ -83,7 +122,7 @@ const packageCard = (pkg, periodName) => {
       `<div class="rw-price">${p.price} <span>${esc(data.currency)}</span></div>` +
       `<div class="rw-cap">${esc(caption(key))}</div>` +
       `<!-- ${periodName} ${esc(pkg.label)} - ${esc(p.label)} -->` +
-      `<a class="rw-btn" href="${esc(p.url)}">اشترك الآن</a>` +
+      `<a class="rw-btn" href="${esc(p.url)}" target="_blank" rel="noopener">اشترك الآن</a>` +
       `</div>`
     );
   }).join('\n          ');
@@ -96,17 +135,11 @@ const packageCard = (pkg, periodName) => {
         </div>`;
 };
 
-/* ---------- كتلة الفترة (عنوان + شبكة + رابط القسم) ---------- */
-
-const periodBlock = ({ period, periodName, tag }) => `
-      <div class="rw-ptitle rw-ptitle-${tag}">باقات ${esc(period.label)}</div>
+const grid = ({ period, periodName, tag }) => `
       <div class="rw-grid rw-grid-${tag}">${hourCard(period, periodName)}${period.packages
   .map((pkg) => packageCard(pkg, periodName))
   .join('')}
-      </div>
-      <div class="rw-all rw-all-${tag}"><a href="${esc(period.categoryUrl)}">تصفح كل باقات ${esc(
-  period.label
-)} في المتجر ↗</a></div>`;
+      </div>`;
 
 /* ---------- الودجت الكامل ---------- */
 
@@ -134,38 +167,37 @@ ${styles}
     <div class="rw-sub">باقات مرنة تكبر مع احتياج طفلك</div>
   </div>
 
-  <div class="rw-ctrl">
-    <div class="rw-ctrl-in">
-      <div class="rw-ctrlrow">
-        <div class="rw-ctrllabel">الفترة</div>
-        <div class="rw-seg">
-          <label class="rw-s-m" for="rw-p-m">${sun(24)}${esc(data.periods.morning.label)}</label>
-          <label class="rw-s-e" for="rw-p-e">${moon(24)}${esc(data.periods.evening.label)}</label>
-        </div>
-      </div>
-      <div class="rw-ctrlrow">
-        <div class="rw-ctrllabel">المدة</div>
-        <div class="rw-seg">
-${DURATIONS.map(
-  (d) => `          <label class="rw-s-${d}" for="rw-d-${d}">${esc(data.durations[d])}</label>`
-).join('\n')}
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- تجربة المحادثة تُبنى هنا بالـJS؛ بدونه تبقى فارغة ويظهر جدول الأسعار أدناه -->
+  <div class="rw-chatwrap" id="rw-chat"></div>
 
-  <div class="rw-main">
-${periodBlock({ period: data.periods.morning, periodName: 'صباحي', tag: 'm' })}
-${periodBlock({ period: data.periods.evening, periodName: 'مسائي', tag: 'e' })}
-    <div class="rw-chips">
-${data.notes.map((n) => `      <div class="rw-chip">${esc(n)}</div>`).join('\n')}
+  <div class="rw-fb" id="rw-fallback">
+    <div class="rw-periodrow">
+      <div class="rw-seg">
+        <label class="rw-s-m" for="rw-p-m">${sun(24)}${esc(data.periods.morning.label)}</label>
+        <label class="rw-s-e" for="rw-p-e">${moon(24)}${esc(data.periods.evening.label)}</label>
+      </div>
     </div>
+    <div class="rw-alltitle rw-alltitle-m">كل باقات ${esc(data.periods.morning.label)}</div>
+    <div class="rw-alltitle rw-alltitle-e">كل باقات ${esc(data.periods.evening.label)}</div>
+    <div class="rw-seg">
+${DURATIONS.map(
+  (d) => `      <label class="rw-s-${d}" for="rw-d-${d}">${esc(data.durations[d])}</label>`
+).join('\n')}
+    </div>
+${grid({ period: data.periods.morning, periodName: 'صباحي', tag: 'm' })}
+${grid({ period: data.periods.evening, periodName: 'مسائي', tag: 'e' })}
+    <div class="rw-catlink rw-catlink-m"><a href="${esc(
+      data.periods.morning.categoryUrl
+    )}" target="_blank" rel="noopener">تصفح كل باقات ${esc(data.periods.morning.label)} ↗</a></div>
+    <div class="rw-catlink rw-catlink-e"><a href="${esc(
+      data.periods.evening.categoryUrl
+    )}" target="_blank" rel="noopener">تصفح كل باقات ${esc(data.periods.evening.label)} ↗</a></div>
   </div>
 
   <div class="rw-foot">
     <div class="rw-ft">تواصل معنا</div>
     <div class="rw-cbtns">
-      <a class="rw-cbtn rw-cbtn-wa" href="${esc(data.contact.whatsapp)}">
+      <a class="rw-cbtn rw-cbtn-wa" href="${esc(data.contact.whatsapp)}" target="_blank" rel="noopener">
         ${ICON_WA}
         واتساب
       </a>
@@ -173,7 +205,7 @@ ${data.notes.map((n) => `      <div class="rw-chip">${esc(n)}</div>`).join('\n')
         ${ICON_TEL}
         اتصال ${esc(data.contact.phone)}
       </a>
-      <a class="rw-cbtn rw-cbtn-map" href="${esc(data.contact.mapsUrl)}">
+      <a class="rw-cbtn rw-cbtn-map" href="${esc(data.contact.mapsUrl)}" target="_blank" rel="noopener">
         ${ICON_MAP}
         موقعنا على الخريطة
       </a>
@@ -183,12 +215,17 @@ ${data.notes.map((n) => `      <div class="rw-chip">${esc(n)}</div>`).join('\n')
   </div>
   <div class="rw-ribbon2"></div>
 </div>
+
+<script type="application/json" id="rw-data">${chatJson}</script>
+<script>
+${chatJs}
+</script>
 </div>`;
 
 /* ---------- المخرجات ---------- */
 
 const title = `باقات ${data.brand} — دليل أسعار الاشتراكات`;
-const description = `باقات اشتراكات ${data.brand}: اختر الفترة والمدة واشترك مباشرة — باقات مرنة تكبر مع احتياج طفلك.`;
+const description = `مرشد الباقات يدلّك على اشتراك طفلك المناسب في ${data.brand} بثلاثة أسئلة — باقات مرنة تكبر مع احتياج طفلك.`;
 
 const page = `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -225,5 +262,6 @@ writeFileSync(join(root, 'site', 'embed.html'), embed, 'utf8');
 
 const links = (page.match(/href="https:\/\/futurepioneers\.net[^"]*"/g) || []).length;
 const cards = (page.match(/class="rw-card"/g) || []).length;
-console.log(`✓ site/index.html  (${page.length} حرف، ${links} رابط سلة، ${cards} بطاقة)`);
+console.log(`✓ site/index.html  (${page.length} حرف، ${links} رابط سلة، ${cards} بطاقة ثابتة)`);
 console.log(`✓ site/embed.html  (${embed.length} حرف)`);
+console.log(`✓ سكربت المحادثة   (${(Buffer.byteLength(chatJs) / 1024).toFixed(1)}KB، بيانات ${(Buffer.byteLength(chatJson) / 1024).toFixed(1)}KB)`);

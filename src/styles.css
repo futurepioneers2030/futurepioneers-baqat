@@ -1,57 +1,103 @@
 #rw-baqat{direction:rtl;font-family:'Almarai','Baloo Bhaijaan 2',sans-serif;color:#2A1B22}
 #rw-baqat *{box-sizing:border-box}
+#rw-baqat button{font:inherit;font-family:inherit;-webkit-appearance:none;appearance:none;border:0;background:none;color:inherit;margin:0}
 #rw-baqat .rw-hide{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px}
-/* بلا overflow:hidden — لأنه يجعل .rw-wrap حاوية تمرير فتتعطّل لوحة sticky.
-   زوايا الحاوية تتشكّل من الشريطين نفسيهما بدل القصّ. */
-#rw-baqat .rw-wrap{background:#FBF2E7;border-radius:22px}
-#rw-baqat .rw-ribbon{height:10px;border-radius:22px 22px 0 0;background:linear-gradient(90deg,#941249,#D60859 45%,#E8BD4B)}
-#rw-baqat .rw-ribbon2{height:10px;border-radius:0 0 22px 22px;background:linear-gradient(90deg,#E8BD4B,#D60859 55%,#941249)}
+#rw-baqat .rw-wrap{background:#FBF2E7;border-radius:22px;overflow:hidden}
+#rw-baqat .rw-ribbon{height:10px;background:linear-gradient(90deg,#941249,#D60859 45%,#E8BD4B)}
+#rw-baqat .rw-ribbon2{height:10px;background:linear-gradient(90deg,#E8BD4B,#D60859 55%,#941249)}
+@keyframes rwIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes rwDot{0%,60%,100%{opacity:.25;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
 
 /* الترويسة */
-#rw-baqat .rw-hero{max-width:960px;margin:0 auto;padding:28px 20px 4px;text-align:center}
-#rw-baqat .rw-hero img{height:72px;width:auto;max-width:70vw;object-fit:contain}
-#rw-baqat .rw-hero h2{margin:10px 0 0;font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:clamp(26px,5vw,36px);color:#D60859;line-height:1.25}
-#rw-baqat .rw-sub{margin-top:4px;font-size:clamp(16px,3vw,20px);font-weight:700;color:#4A323E}
+#rw-baqat .rw-hero{max-width:820px;margin:0 auto;padding:24px 20px 0;text-align:center}
+#rw-baqat .rw-hero img{height:60px;width:auto;max-width:56vw;object-fit:contain}
+#rw-baqat .rw-hero h2{margin:8px 0 0;font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:clamp(23px,5vw,32px);color:#D60859;line-height:1.25}
+#rw-baqat .rw-sub{margin-top:4px;font-size:clamp(16px,3vw,19px);font-weight:700;color:#4A323E}
 
-/* لوحة التحكم الثابتة */
-#rw-baqat .rw-ctrl{position:sticky;top:0;z-index:20;background:#FBF2E7;box-shadow:0 8px 18px rgba(148,18,73,.06);padding:16px 20px 14px}
-#rw-baqat .rw-ctrl-in{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
-#rw-baqat .rw-ctrlrow{display:flex;align-items:center;gap:12px}
-#rw-baqat .rw-ctrllabel{width:64px;font-size:17px;font-weight:800;color:#4A323E;flex-shrink:0}
-#rw-baqat .rw-seg{flex:1;display:flex;gap:8px;background:#fff;border:2px solid #EAD9C6;border-radius:999px;padding:6px}
-#rw-baqat .rw-seg label{flex:1 1 0;min-width:0;min-height:56px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:800;font-size:clamp(15px,4.2vw,19px);color:#941249;cursor:pointer;text-align:center;transition:background .2s,color .2s}
+/* ===== المحادثة (تُبنى بالـJS؛ بدونه تبقى الحاوية فارغة) ===== */
+#rw-baqat .rw-chatwrap{max-width:720px;margin:20px auto 0;padding:0 20px}
+#rw-baqat .rw-chatbox{background:#fff;border:2px solid #F0DECC;border-radius:26px;overflow:hidden;box-shadow:0 12px 30px rgba(148,18,73,.08)}
+#rw-baqat .rw-chathead{display:flex;align-items:center;gap:12px;padding:14px 18px;background:linear-gradient(120deg,#941249,#5E0B30)}
+#rw-baqat .rw-av{width:52px;height:52px;border-radius:999px;background:#fff;border:2px solid #E8BD4B;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#rw-baqat .rw-av img{width:42px;height:42px;object-fit:contain}
+#rw-baqat .rw-av-sm{width:40px;height:40px}
+#rw-baqat .rw-av-sm img{width:32px;height:32px}
+#rw-baqat .rw-chatid{display:flex;flex-direction:column;gap:2px}
+#rw-baqat .rw-chatname{font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:20px;color:#fff}
+#rw-baqat .rw-chatstatus{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:#F3D9E4}
+#rw-baqat .rw-dot9{width:9px;height:9px;border-radius:999px;background:#E8BD4B;display:inline-block}
+#rw-baqat .rw-thread{background:#FBF2E7;padding:18px;display:flex;flex-direction:column;gap:14px;max-height:520px;overflow-y:auto}
+#rw-baqat .rw-row{display:flex;gap:10px;align-items:flex-end;animation:rwIn .28s ease-out both}
+#rw-baqat .rw-row-g{justify-content:flex-start}
+#rw-baqat .rw-row-u{justify-content:flex-end}
+#rw-baqat .rw-bub{max-width:84%}
+#rw-baqat .rw-bub-g{background:#fff;border:2px solid #F0DECC;border-radius:22px;border-bottom-right-radius:8px;padding:16px 20px;box-shadow:0 6px 16px rgba(148,18,73,.06)}
+#rw-baqat .rw-bub-u{background:#D60859;border-radius:22px;border-bottom-left-radius:8px;padding:14px 20px;box-shadow:0 6px 16px rgba(214,8,89,.22)}
+#rw-baqat .rw-txt-g{font-family:'Almarai',sans-serif;font-weight:700;font-size:clamp(17px,3.6vw,19px);line-height:1.6;color:#2A1B22}
+#rw-baqat .rw-txt-u{font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:clamp(18px,3.8vw,21px);line-height:1.6;color:#fff}
+#rw-baqat .rw-typing{display:flex;gap:6px;align-items:center}
+#rw-baqat .rw-tdot{width:10px;height:10px;border-radius:999px;background:#941249;display:inline-block;animation:rwDot 1s infinite}
+#rw-baqat .rw-tdot:nth-child(2){animation-delay:.15s}
+#rw-baqat .rw-tdot:nth-child(3){animation-delay:.3s}
+
+/* بطاقة النتيجة داخل فقاعة المرشد */
+#rw-baqat .rw-res{margin-top:12px;background:linear-gradient(120deg,#FFF7E8,#FFE9C4);border:2px solid #E8BD4B;border-radius:20px;padding:18px 16px;text-align:center}
+#rw-baqat .rw-res-t{font-size:16px;font-weight:800;color:#941249}
+#rw-baqat .rw-res-p{margin-top:8px;display:flex;align-items:baseline;justify-content:center;gap:7px;font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:46px;color:#2A1B22;line-height:1}
+#rw-baqat .rw-res-p span{font-family:'Almarai',sans-serif;font-size:18px;font-weight:700;color:#4A323E}
+#rw-baqat .rw-res-c{margin-top:4px;font-size:16px;font-weight:700;color:#4A323E}
+#rw-baqat .rw-res-b{margin-top:16px;display:flex;align-items:center;justify-content:center;width:100%;min-height:62px;background:#D60859;color:#fff !important;border-radius:999px;font-weight:800;font-size:21px;text-decoration:none !important;box-shadow:0 8px 20px rgba(214,8,89,.3);transition:background .2s}
+#rw-baqat .rw-res-b:hover{background:#941249}
+#rw-baqat .rw-res-n{margin-top:8px;font-size:14px;font-weight:700;color:#4A323E}
+
+/* شريط الردود السريعة */
+#rw-baqat .rw-qbar{padding:16px 18px;background:#fff;border-top:2px solid #F0DECC}
+#rw-baqat .rw-qlabel{font-size:15px;font-weight:800;color:#4A323E;margin-bottom:10px}
+#rw-baqat .rw-qr{display:grid;gap:10px}
+#rw-baqat .rw-qr-2{grid-template-columns:repeat(2,1fr)}
+#rw-baqat .rw-qr-3{grid-template-columns:repeat(3,1fr)}
+#rw-baqat .rw-q{min-height:62px;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:20px;padding:8px 16px;text-align:center;transition:background .18s,border-color .18s,transform .18s;animation:rwIn .28s ease-out both;background:#fff;color:#941249;border:2px solid #EAD9C6}
+#rw-baqat .rw-q-sub{font-family:'Almarai',sans-serif;font-size:14px;font-weight:700;opacity:.85}
+#rw-baqat .rw-q-gold{background:linear-gradient(165deg,#FFF7E8,#FFEBC7);color:#941249;border:2px solid #E8BD4B}
+#rw-baqat .rw-q-dark{background:linear-gradient(165deg,#941249,#5E0B30);color:#fff;border:2px solid #941249}
+#rw-baqat .rw-q-primary{background:#D60859;color:#fff;border:2px solid #D60859;box-shadow:0 6px 16px rgba(214,8,89,.22)}
+
+/* مخرج «أعرف ما أريد» */
+#rw-baqat .rw-allbtn{margin:18px auto 0;max-width:420px;width:100%;border:2px dashed #EAD9C6;background:#fff;border-radius:18px;min-height:56px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:800;font-size:17px;color:#941249}
+
+/* ===== جدول الأسعار الكامل (يعمل بلا JS) ===== */
+#rw-baqat .rw-fb{max-width:960px;margin:0 auto;padding:10px 20px 0}
+#rw-baqat.rw-js .rw-fb{display:none}
+#rw-baqat.rw-js .rw-fb.rw-open{display:block}
+#rw-baqat.rw-js .rw-periodrow{display:none}
+#rw-baqat .rw-alltitle{display:none;text-align:center;margin-top:16px;font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:clamp(21px,4vw,26px);color:#941249}
+#rw-baqat .rw-seg{display:flex;gap:8px;background:#fff;border:2px solid #EAD9C6;border-radius:999px;padding:6px;max-width:620px;margin:14px auto 0}
+#rw-baqat .rw-seg label{flex:1 1 0;min-width:0;min-height:54px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:800;font-size:clamp(15px,4.2vw,19px);color:#941249;cursor:pointer;text-align:center;transition:background .2s,color .2s}
 #rw-p-m:checked ~ .rw-wrap .rw-s-m,#rw-p-e:checked ~ .rw-wrap .rw-s-e,
 #rw-d-day:checked ~ .rw-wrap .rw-s-day,#rw-d-week:checked ~ .rw-wrap .rw-s-week,#rw-d-month:checked ~ .rw-wrap .rw-s-month,#rw-d-term:checked ~ .rw-wrap .rw-s-term{background:#D60859;color:#fff;box-shadow:0 4px 14px rgba(214,8,89,.25)}
-
-/* المحتوى */
-#rw-baqat .rw-main{max-width:960px;margin:0 auto;padding:8px 20px 0}
-#rw-baqat .rw-ptitle{display:none;text-align:center;margin-top:18px;font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:clamp(21px,4vw,26px);color:#941249}
-#rw-baqat .rw-grid{display:none;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
-#rw-baqat .rw-all{display:none;text-align:center;margin-top:20px;font-size:16px;font-weight:700}
-#rw-baqat .rw-all a{color:#941249 !important;text-decoration:underline}
-#rw-p-m:checked ~ .rw-wrap .rw-ptitle-m,#rw-p-e:checked ~ .rw-wrap .rw-ptitle-e{display:block}
+#rw-p-m:checked ~ .rw-wrap .rw-alltitle-m,#rw-p-e:checked ~ .rw-wrap .rw-alltitle-e{display:block}
 #rw-p-m:checked ~ .rw-wrap .rw-grid-m,#rw-p-e:checked ~ .rw-wrap .rw-grid-e{display:grid}
-#rw-p-m:checked ~ .rw-wrap .rw-all-m,#rw-p-e:checked ~ .rw-wrap .rw-all-e{display:block}
-@media (max-width:900px){#rw-baqat .rw-grid{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:560px){#rw-baqat .rw-grid{grid-template-columns:1fr}#rw-baqat .rw-ctrlrow{flex-direction:column;align-items:stretch}#rw-baqat .rw-ctrllabel{width:auto}}
-
-/* البطاقات */
-#rw-baqat .rw-card{background:#fff;border:2px solid #F0DECC;border-radius:22px;padding:24px 18px 18px;display:flex;flex-direction:column;align-items:center;gap:12px;transition:transform .2s,box-shadow .2s}
+#rw-p-m:checked ~ .rw-wrap .rw-catlink-m,#rw-p-e:checked ~ .rw-wrap .rw-catlink-e{display:block}
+#rw-baqat .rw-grid{display:none;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+#rw-baqat .rw-card{background:#fff;border:2px solid #F0DECC;border-radius:22px;padding:22px 18px 18px;display:flex;flex-direction:column;align-items:center;gap:12px;transition:transform .2s,box-shadow .2s}
 #rw-baqat .rw-card:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(148,18,73,.12)}
-#rw-baqat .rw-h{font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:27px;color:#D60859}
+#rw-baqat .rw-h{font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:26px;color:#D60859}
 #rw-baqat .rw-bar{width:44px;height:3px;border-radius:2px;background:#E8BD4B}
-#rw-baqat .rw-price{display:flex;align-items:baseline;gap:6px;font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:46px;color:#2A1B22;line-height:1}
+#rw-baqat .rw-price{display:flex;align-items:baseline;gap:6px;font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:44px;color:#2A1B22;line-height:1}
 #rw-baqat .rw-price span{font-family:'Almarai',sans-serif;font-size:17px;font-weight:700;color:#4A323E}
 #rw-baqat .rw-cap{font-size:17px;font-weight:700;color:#4A323E;margin-top:-6px}
 #rw-baqat .rw-btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:58px;background:#D60859;color:#fff !important;border-radius:999px;font-weight:800;font-size:20px;text-decoration:none !important;margin-top:2px;transition:background .2s}
 #rw-baqat .rw-btn:hover{background:#941249}
+#rw-baqat .rw-catlink{display:none;text-align:center;margin-top:18px;font-size:16px;font-weight:700}
+#rw-baqat .rw-catlink a{color:#941249 !important;text-decoration:underline}
 /* بطاقة «ساعة واحدة» ملفوفة بـ rw-v-day، فتظهر مع «اليوم» فقط */
 #rw-baqat .rw-v{display:none}
 #rw-d-day:checked ~ .rw-wrap .rw-v-day,#rw-d-week:checked ~ .rw-wrap .rw-v-week,#rw-d-month:checked ~ .rw-wrap .rw-v-month,#rw-d-term:checked ~ .rw-wrap .rw-v-term{display:contents}
 
-/* الشرائح */
-#rw-baqat .rw-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin:18px auto 0}
-#rw-baqat .rw-chip{background:#fff;border:1.5px solid #EAD9C6;border-radius:999px;padding:10px 18px;font-size:15px;font-weight:700;color:#941249}
+@media (max-width:900px){#rw-baqat .rw-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){#rw-baqat .rw-grid{grid-template-columns:1fr}#rw-baqat .rw-qr-2,#rw-baqat .rw-qr-3{grid-template-columns:1fr}}
+/* احترام تفضيل تقليل الحركة — ويمنع أيضًا بقاء المحتوى شفافًا لو لم تُشغَّل الحركة */
+@media (prefers-reduced-motion:reduce){#rw-baqat .rw-row,#rw-baqat .rw-q{animation:none}#rw-baqat .rw-tdot{animation:none;opacity:.6}}
 
 /* التذييل */
 #rw-baqat .rw-foot{margin-top:36px;background:#fff;border-top:1.5px solid #F0DECC;padding:28px 18px 24px;text-align:center}

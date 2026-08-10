@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@600;700;800&amp;family=Almarai:wght@400;700;800&amp;display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#fff}
+a{color:#941249}a:hover{color:#D60859}
+@keyframes rwIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes rwDot{0%,60%,100%{opacity:.25;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+@media (max-width:900px){.g3{grid-template-columns:repeat(2,1fr) !important}}
+@media (max-width:600px){.g3{grid-template-columns:1fr !important}.qr{grid-template-columns:1fr !important}}
+</style>
+</helmet>
+<div dir="rtl" style="direction:rtl;font-family:'Almarai','Baloo Bhaijaan 2',sans-serif;color:#2A1B22;background:#fff">
+  <div style="background:#FBF2E7;border-radius:22px;overflow:hidden">
+    <div style="height:10px;background:linear-gradient(90deg,#941249,#D60859 45%,#E8BD4B)"></div>
+    <div style="max-width:820px;margin:0 auto;padding:24px 20px 0;text-align:center">
+      <img src="https://cdn.salla.sa/zvRpzp/stores/logos/BGGdLHdolsCv1vs9hGSy3jUFT1xukKBeQX3qjPPn.png" alt="مركز رواد المستقبل للأطفال" style="height:60px;width:auto;max-width:56vw;object-fit:contain">
+      <h2 style="margin:8px 0 0;font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:clamp(23px,5vw,32px);color:#D60859;line-height:1.25">دليل أسعار الاشتراكات</h2>
+      <div style="margin-top:4px;font-size:clamp(16px,3vw,19px);font-weight:700;color:#4A323E">باقات مرنة تكبر مع احتياج طفلك</div>
+    </div>
+    <div data-screen-label="المحادثة" style="max-width:720px;margin:20px auto 0;padding:0 20px">
+      <div style="background:#fff;border:2px solid #F0DECC;border-radius:26px;overflow:hidden;box-shadow:0 12px 30px rgba(148,18,73,.08)">
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;background:linear-gradient(120deg,#941249,#5E0B30)">
+          <div style="width:52px;height:52px;border-radius:999px;background:#fff;border:2px solid #E8BD4B;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden">
+            <img src="https://cdn.salla.sa/zvRpzp/stores/logos/BGGdLHdolsCv1vs9hGSy3jUFT1xukKBeQX3qjPPn.png" alt="مرشد الباقات" style="width:42px;height:42px;object-fit:contain">
+          </div>
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:20px;color:#fff">مرشد الباقات</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:#F3D9E4"><span style="width:9px;height:9px;border-radius:999px;background:#E8BD4B;display:inline-block"></span> يساعدك في اختيار الباقة</div>
+          </div>
+        </div>
+        <div ref="{{ threadRef }}" style="background:#FBF2E7;padding:18px;display:flex;flex-direction:column;gap:14px;max-height:520px;overflow-y:auto">
+          <sc-for list="{{ msgs }}" as="m" hint-placeholder-count="2">
+            <div style="{{ m.rowStyle }}">
+              <sc-if value="{{ m.isGuide }}" hint-placeholder-val="{{ true }}">
+                <div style="width:40px;height:40px;border-radius:999px;background:#fff;border:2px solid #E8BD4B;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden">
+                  <img src="https://cdn.salla.sa/zvRpzp/stores/logos/BGGdLHdolsCv1vs9hGSy3jUFT1xukKBeQX3qjPPn.png" alt="" style="width:32px;height:32px;object-fit:contain">
+                </div>
+              </sc-if>
+              <div style="{{ m.bubbleStyle }}">
+                <div style="{{ m.textStyle }}">{{ m.text }}</div>
+                <sc-if value="{{ m.hasPrice }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:12px;background:linear-gradient(120deg,#FFF7E8,#FFE9C4);border:2px solid #E8BD4B;border-radius:20px;padding:18px 16px;text-align:center">
+                    <div style="font-size:16px;font-weight:800;color:#941249">{{ m.pkgTitle }}</div>
+                    <div style="margin-top:8px;display:flex;align-items:baseline;justify-content:center;gap:7px;font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:46px;color:#2A1B22;line-height:1">{{ m.price }} <span style="font-family:'Almarai',sans-serif;font-size:18px;font-weight:700;color:#4A323E">ريال</span></div>
+                    <div style="margin-top:4px;font-size:16px;font-weight:700;color:#4A323E">{{ m.cap }}</div>
+                    <a href="{{ m.url }}" target="_blank" rel="noopener" style="margin-top:16px;display:flex;align-items:center;justify-content:center;width:100%;min-height:62px;background:#D60859;color:#fff;border-radius:999px;font-weight:800;font-size:21px;text-decoration:none;box-shadow:0 8px 20px rgba(214,8,89,.3);transition:background .2s" style-hover="background:#941249">اشترك الآن</a>
+                    <div style="margin-top:8px;font-size:14px;font-weight:700;color:#4A323E">يفتح صفحة الباقة في المتجر لإتمام الطلب</div>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+          </sc-for>
+          <sc-if value="{{ typing }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;gap:10px;align-items:flex-end">
+              <div style="width:40px;height:40px;border-radius:999px;background:#fff;border:2px solid #E8BD4B;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden">
+                <img src="https://cdn.salla.sa/zvRpzp/stores/logos/BGGdLHdolsCv1vs9hGSy3jUFT1xukKBeQX3qjPPn.png" alt="" style="width:32px;height:32px;object-fit:contain">
+              </div>
+              <div style="background:#fff;border:2px solid #F0DECC;border-radius:22px;border-bottom-right-radius:8px;padding:16px 20px;display:flex;gap:6px;align-items:center">
+                <span style="width:10px;height:10px;border-radius:999px;background:#941249;display:inline-block;animation:rwDot 1s infinite"></span>
+                <span style="width:10px;height:10px;border-radius:999px;background:#941249;display:inline-block;animation:rwDot 1s infinite .15s"></span>
+                <span style="width:10px;height:10px;border-radius:999px;background:#941249;display:inline-block;animation:rwDot 1s infinite .3s"></span>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+        <div style="padding:16px 18px;background:#fff;border-top:2px solid #F0DECC">
+          <div style="font-size:15px;font-weight:800;color:#4A323E;margin-bottom:10px">{{ replyLabel }}</div>
+          <div class="qr" style="{{ qrGrid }}">
+            <sc-for list="{{ quick }}" as="q" hint-placeholder-count="2">
+              <div onClick="{{ q.pick }}" style="{{ q.style }}">
+                <span>{{ q.label }}</span>
+                <sc-if value="{{ q.hasSub }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-family:'Almarai',sans-serif;font-size:14px;font-weight:700;opacity:.85">{{ q.sub }}</span>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      <div onClick="{{ toggleAll }}" style="margin:18px auto 0;max-width:420px;border:2px dashed #EAD9C6;background:#fff;border-radius:18px;min-height:56px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:800;font-size:17px;color:#941249">{{ allLabel }}</div>
+    </div>
+    <sc-if value="{{ showAll }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="كل الأسعار" style="max-width:960px;margin:0 auto;padding:10px 20px 0">
+        <div style="text-align:center;margin-top:16px;font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:clamp(21px,4vw,26px);color:#941249">{{ allTitle }}</div>
+        <div style="display:flex;gap:8px;background:#fff;border:2px solid #EAD9C6;border-radius:999px;padding:6px;max-width:620px;margin:14px auto 0">
+          <sc-for list="{{ allDurSeg }}" as="t" hint-placeholder-count="4">
+            <div onClick="{{ t.pick }}" style="{{ t.style }}">{{ t.label }}</div>
+          </sc-for>
+        </div>
+        <div class="g3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px">
+          <sc-for list="{{ allCards }}" as="c" hint-placeholder-count="6">
+            <div style="background:#fff;border:2px solid #F0DECC;border-radius:22px;padding:22px 18px 18px;display:flex;flex-direction:column;align-items:center;gap:12px;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-3px);box-shadow:0 12px 26px rgba(148,18,73,.12)">
+              <div style="font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:26px;color:#D60859">{{ c.title }}</div>
+              <div style="width:44px;height:3px;border-radius:2px;background:#E8BD4B"></div>
+              <div style="display:flex;align-items:baseline;gap:6px;font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:44px;color:#2A1B22;line-height:1">{{ c.price }} <span style="font-family:'Almarai',sans-serif;font-size:17px;font-weight:700;color:#4A323E">ريال</span></div>
+              <div style="font-size:17px;font-weight:700;color:#4A323E;margin-top:-6px">{{ c.cap }}</div>
+              <a href="{{ c.url }}" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;width:100%;min-height:58px;background:#D60859;color:#fff;border-radius:999px;font-weight:800;font-size:20px;text-decoration:none;margin-top:2px;transition:background .2s" style-hover="background:#941249">اشترك الآن</a>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+    <div style="margin-top:36px;background:#fff;border-top:1.5px solid #F0DECC;padding:28px 18px 24px;text-align:center">
+      <div style="font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:22px;color:#941249">تواصل معنا</div>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:14px">
+        <a href="https://wa.me/966591044434" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;min-height:56px;padding:0 26px;border-radius:999px;font-weight:800;font-size:18px;text-decoration:none;background:#D60859;color:#fff;box-shadow:0 6px 16px rgba(214,8,89,.25)">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2Zm5 13.6c-.2.6-1.2 1.2-1.7 1.2-.4.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.6-2.6-1.1-4.3-3.8-4.4-4-.1-.2-1-1.4-1-2.6s.6-1.8.9-2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.4l.9 2.1c.1.2.1.4 0 .6l-.4.6c-.1.2-.3.4-.1.7.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.7-.1l1-1.1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.3.1.2.1.6-.1 1.2Z"></path></svg>
+          واتساب
+        </a>
+        <a href="tel:0591044434" style="display:inline-flex;align-items:center;gap:8px;min-height:56px;padding:0 26px;border-radius:999px;font-weight:800;font-size:18px;text-decoration:none;border:2px solid #941249;color:#941249">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#941249" stroke-width="2" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2Z"></path></svg>
+          اتصال 0591044434
+        </a>
+        <a href="https://www.google.com/maps/place/%D9%85%D8%B1%D9%83%D8%B2+%D8%B1%D9%88%D8%A7%D8%AF+%D8%A7%D9%84%D9%85%D8%B3%D8%AA%D9%82%D8%A8%D9%84+%D9%84%D9%84%D8%A3%D8%B7%D9%81%D8%A7%D9%84+%5B%D8%AD%D8%B6%D8%A7%D9%86%D8%A9+%D9%88%D8%B1%D9%88%D8%B6%D8%A9+%D9%84%D9%84%D8%A3%D8%B7%D9%81%D8%A7%D9%84%5D%E2%80%AD/data=!4m2!3m1!1s0x0:0xbcb4cf8fa4fc6a11?sa=X&amp;ved=1t:2428&amp;ictx=111" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;min-height:56px;padding:0 26px;border-radius:999px;font-weight:800;font-size:18px;text-decoration:none;border:2px solid #E8BD4B;color:#941249">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#941249" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          موقعنا على الخريطة
+        </a>
+      </div>
+      <div style="margin-top:16px;font-size:16px;color:#4A323E;line-height:1.9">المدينة المنورة — حي شرق المدينة — خلف قصر ذكرى<br>الدوام من الساعة 6:45 صباحاً إلى 9 مساءً</div>
+      <div style="margin-top:10px;font-size:14px;font-weight:700;color:#941249">مركز رواد المستقبل للأطفال</div>
+    </div>
+    <div style="height:10px;background:linear-gradient(90deg,#E8BD4B,#D60859 55%,#941249)"></div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:860,&quot;height&quot;:1100}}">
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      msgs: [{ who: 'g', text: 'مرحباً بك في مركز رواد المستقبل للأطفال. أنا هنا لأدلّك على الباقة المناسبة لطفلك في أقل من دقيقة.' }],
+      typing: false, stage: 'period', period: null, hours: null, dur: null,
+      showAll: false, allDur: 'day'
+    };
+    this.timers = [];
+    this.thread = React.createRef();
+  }
+  componentDidMount() {
+    this.say('متى تحتاج حضور طفلك — الفترة الصباحية أم المسائية؟', 700);
+  }
+  componentDidUpdate() {
+    const el = this.thread.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }
+  componentWillUnmount() { this.timers.forEach(clearTimeout); }
+  wait(ms, fn) { this.timers.push(setTimeout(fn, ms)); }
+  say(text, delay, extra) {
+    this.setState({ typing: true });
+    this.wait(delay || 650, () => this.setState(s => ({
+      typing: false, msgs: s.msgs.concat([Object.assign({ who: 'g', text }, extra || {})])
+    })));
+  }
+  me(text) { this.setState(s => ({ msgs: s.msgs.concat([{ who: 'u', text }]) })); }
+  data() {
+    const M = 'https://futurepioneers.net/الفترة-الصباحية-اشتراك-';
+    const E = 'https://futurepioneers.net/الفترة-المسائية-اشتراك-';
+    const mk = (pre, termWord, rows) => rows.map(r => ({
+      label: r[0] + ' ساعات',
+      prices: {
+        day:   { price: r[1], url: pre + 'باليوم-' + r[0] + '-ساعات/' + r[5] },
+        week:  { price: r[2], url: pre + 'اسبوعي-' + r[0] + '-ساعات/' + r[6] },
+        month: { price: r[3], url: pre + 'شهري-' + r[0] + '-ساعات/' + r[7] },
+        term:  { price: r[4], url: pre + termWord + '-' + r[0] + '-ساعات/' + r[8] }
+      }
+    }));
+    return {
+      m: {
+        label: 'الفترة الصباحية',
+        cat: 'https://futurepioneers.net/الفترة-الصباحية/c1643999108',
+        catLabel: 'تصفح كل باقات الفترة الصباحية ↗',
+        hour: { price: 25, url: M + 'ساعة/p1492487661' },
+        packs: mk(M, 'ترم', [
+          [4, 55, 250, 650, 2100, 'p1302063314', 'p2115944490', 'p2080731704', 'p374527772'],
+          [5, 65, 300, 750, 2500, 'p223865717', 'p1234702622', 'p911338442', 'p257233496'],
+          [6, 75, 350, 850, 2700, 'p196600398', 'p210545771', 'p803227861', 'p1455594916'],
+          [8, 90, 425, 1050, 3300, 'p446229078', 'p1131882304', 'p628135376', 'p507386272'],
+          [10, 125, 600, 1250, 4000, 'p411081636', 'p1098901846', 'p1234319397', 'p1638630828']
+        ])
+      },
+      e: {
+        label: 'الفترة المسائية',
+        cat: 'https://futurepioneers.net/الفترة-المسائية/c193898983',
+        catLabel: 'تصفح كل باقات الفترة المسائية ↗',
+        hour: { price: 25, url: E + 'بالساعة/p1353339257' },
+        packs: mk(E, 'بالترم', [
+          [4, 55, 250, 650, 2100, 'p1277255754', 'p1899522467', 'p1176008124', 'p1140860802'],
+          [5, 65, 300, 750, 2500, 'p984425561', 'p1548360311', 'p2042174346', 'p1826145680'],
+          [6, 75, 350, 850, 2700, 'p35303333', 'p2080135281', 'p361248237', 'p955539406'],
+          [8, 90, 425, 1050, 3300, 'p2074676384', 'p665290355', 'p284846309', 'p1272793046'],
+          [10, 125, 600, 1250, 4000, 'p405819811', 'p147714639', 'p1657239526', 'p323666898']
+        ])
+      }
+    };
+  }
+  DUR() {
+    return [
+      ['day', 'اليوم', 'يوم واحد', 'في اليوم'],
+      ['week', 'الأسبوع', 'خمسة أيام', 'في الأسبوع'],
+      ['month', 'الشهر', 'شهر كامل', 'في الشهر'],
+      ['term', 'الترم', 'الفصل الدراسي', 'في الترم']
+    ];
+  }
+  pickPeriod(key) {
+    const p = this.data()[key];
+    this.me(p.label);
+    this.setState({ period: key, stage: 'hours' });
+    this.say('اختيار موفق. وكم ساعة يبقى طفلك في المركز؟', 750);
+  }
+  pickHours(val) {
+    const p = this.data()[this.state.period];
+    if (val === 'hour') {
+      this.me('ساعة واحدة');
+      this.setState({ hours: 'hour', dur: null, stage: 'done' });
+      this.wait(0, () => this.say('اشتراك الساعة الواحدة متاح مباشرة. هذا هو الرابط لإتمام الطلب:', 800, {
+        hasPrice: true, pkgTitle: p.label + ' · ساعة واحدة',
+        price: p.hour.price, cap: 'للساعة الواحدة', url: p.hour.url
+      }));
+      return;
+    }
+    this.me(p.packs[val].label);
+    this.setState({ hours: val, stage: 'dur' });
+    this.say('تمام. وكم مدة الاشتراك التي تريدها؟', 750);
+  }
+  pickDur(key) {
+    const s = this.state, p = this.data()[s.period];
+    const d = this.DUR().find(x => x[0] === key), k = p.packs[s.hours];
+    this.me(d[1]);
+    this.setState({ dur: key, stage: 'done' });
+    this.say('وجدت الباقة المناسبة لطفلك. هذا هو الرابط لإتمام الطلب:', 850, {
+      hasPrice: true, pkgTitle: p.label + ' · ' + k.label + ' · ' + d[1],
+      price: k.prices[key].price, cap: d[3], url: k.prices[key].url
+    });
+  }
+  restart() {
+    this.timers.forEach(clearTimeout); this.timers = [];
+    this.setState({
+      msgs: [{ who: 'g', text: 'لا مشكلة، نبدأ من جديد. متى تحتاج حضور طفلك — الفترة الصباحية أم المسائية؟' }],
+      typing: false, stage: 'period', period: null, hours: null, dur: null
+    });
+  }
+  qBtn(kind) {
+    const base = {
+      minHeight: '62px', borderRadius: '18px', display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center', gap: '2px', cursor: 'pointer',
+      fontFamily: "'Baloo Bhaijaan 2','Almarai',sans-serif", fontWeight: 800, fontSize: '20px',
+      padding: '8px 16px', textAlign: 'center', transition: 'background .18s,border-color .18s,transform .18s'
+    };
+    if (kind === 'primary') return Object.assign(base, { background: '#D60859', color: '#fff', border: '2px solid #D60859', boxShadow: '0 6px 16px rgba(214,8,89,.22)' });
+    if (kind === 'dark') return Object.assign(base, { background: 'linear-gradient(165deg,#941249,#5E0B30)', color: '#fff', border: '2px solid #941249' });
+    if (kind === 'gold') return Object.assign(base, { background: 'linear-gradient(165deg,#FFF7E8,#FFEBC7)', color: '#941249', border: '2px solid #E8BD4B' });
+    return Object.assign(base, { background: '#fff', color: '#941249', border: '2px solid #EAD9C6' });
+  }
+  renderVals() {
+    const s = this.state, D = this.data(), DUR = this.DUR();
+    const p = s.period ? D[s.period] : null;
+    let quick = [], replyLabel = 'اختر ردك:', cols = 2;
+    if (s.stage === 'period') {
+      quick = [
+        { label: 'الفترة الصباحية', sub: 'من 6:45 صباحاً', hasSub: true, style: this.qBtn('gold'), pick: () => this.pickPeriod('m') },
+        { label: 'الفترة المسائية', sub: 'حتى 9 مساءً', hasSub: true, style: this.qBtn('dark'), pick: () => this.pickPeriod('e') }
+      ];
+    } else if (s.stage === 'hours') {
+      cols = 3;
+      quick = [
+        { label: 'ساعة واحدة', hasSub: false, style: this.qBtn(), pick: () => this.pickHours('hour') },
+        ...p.packs.map((k, i) => ({ label: k.label, hasSub: false, style: this.qBtn(), pick: () => this.pickHours(i) }))
+      ];
+    } else if (s.stage === 'dur') {
+      cols = 2;
+      quick = DUR.map(d => ({
+        label: d[1], sub: p.packs[s.hours].prices[d[0]].price + ' ريال', hasSub: true,
+        style: this.qBtn(), pick: () => this.pickDur(d[0])
+      }));
+    } else {
+      replyLabel = 'هل تحتاج شيئاً آخر؟';
+      quick = [
+        { label: 'ابدأ من جديد', hasSub: false, style: this.qBtn('primary'), pick: () => this.restart() },
+        { label: 'أرسل لي سؤالاً على واتساب', hasSub: false, style: this.qBtn(), pick: () => window.open('https://wa.me/966591044434', '_blank') }
+      ];
+    }
+    const allP = D[s.period || 'm'], allCap = DUR.find(d => d[0] === s.allDur)[3];
+    const seg = active => Object.assign({
+      flex: '1 1 0', minWidth: 0, minHeight: '54px', borderRadius: '999px', display: 'flex',
+      alignItems: 'center', justifyContent: 'center', fontWeight: 800,
+      fontSize: 'clamp(15px,4.2vw,19px)', cursor: 'pointer', transition: 'background .2s,color .2s'
+    }, active
+      ? { background: '#D60859', color: '#fff', boxShadow: '0 4px 14px rgba(214,8,89,.25)' }
+      : { color: '#941249' });
+    return {
+      threadRef: this.thread,
+      msgs: s.msgs.map(m => {
+        const guide = m.who === 'g';
+        return Object.assign({}, m, {
+          isGuide: guide,
+          hasPrice: !!m.hasPrice,
+          rowStyle: {
+            display: 'flex', gap: '10px', alignItems: 'flex-end',
+            justifyContent: guide ? 'flex-start' : 'flex-end',
+            animation: 'rwIn .28s ease-out both'
+          },
+          bubbleStyle: guide
+            ? { background: '#fff', border: '2px solid #F0DECC', borderRadius: '22px', borderBottomRightRadius: '8px', padding: '16px 20px', maxWidth: '84%', boxShadow: '0 6px 16px rgba(148,18,73,.06)' }
+            : { background: '#D60859', borderRadius: '22px', borderBottomLeftRadius: '8px', padding: '14px 20px', maxWidth: '84%', boxShadow: '0 6px 16px rgba(214,8,89,.22)' },
+          textStyle: {
+            fontFamily: guide ? "'Almarai',sans-serif" : "'Baloo Bhaijaan 2','Almarai',sans-serif",
+            fontWeight: guide ? 700 : 800,
+            fontSize: guide ? 'clamp(17px,3.6vw,19px)' : 'clamp(18px,3.8vw,21px)',
+            lineHeight: 1.6, color: guide ? '#2A1B22' : '#fff'
+          }
+        });
+      }),
+      typing: s.typing,
+      replyLabel, quick,
+      qrGrid: { display: 'grid', gridTemplateColumns: 'repeat(' + cols + ',1fr)', gap: '10px' },
+      showAll: s.showAll,
+      allLabel: s.showAll ? 'إخفاء كل الأسعار' : 'أعرف ما أريد — أعرض كل الأسعار',
+      toggleAll: () => this.setState({ showAll: !s.showAll }),
+      allTitle: 'كل باقات ' + allP.label,
+      allDurSeg: DUR.map(d => ({ label: d[1], pick: () => this.setState({ allDur: d[0] }), style: seg(s.allDur === d[0]) })),
+      allCards: [
+        ...(s.allDur === 'day' ? [{ title: 'ساعة واحدة', price: allP.hour.price, cap: 'للساعة الواحدة', url: allP.hour.url }] : []),
+        ...allP.packs.map(k => ({ title: k.label, price: k.prices[s.allDur].price, cap: allCap, url: k.prices[s.allDur].url }))
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
