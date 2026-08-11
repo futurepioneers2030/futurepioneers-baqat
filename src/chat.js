@@ -61,9 +61,16 @@
   thread.setAttribute('aria-live', 'polite');
 
   var qlabel = el('div', 'rw-qlabel');
+  var backBtn = el('button', 'rw-back', 'رجوع ↩');
+  backBtn.type = 'button';
+  backBtn.title = 'العودة إلى السؤال السابق';
+  var qtop = el('div', 'rw-qtop');
+  qtop.appendChild(qlabel);
+  qtop.appendChild(backBtn);
+
   var qgrid = el('div', 'rw-qr rw-qr-2');
   var qbar = el('div', 'rw-qbar');
-  qbar.appendChild(qlabel);
+  qbar.appendChild(qtop);
   qbar.appendChild(qgrid);
 
   var box = el('div', 'rw-chatbox');
@@ -85,6 +92,7 @@
   var hours = null;
   var timers = [];
   var typingRow = null;
+  var history = [];
 
   function wait(ms, fn) {
     timers.push(setTimeout(fn, ms));
@@ -95,6 +103,27 @@
   }
   function toBottom() {
     thread.scrollTop = thread.scrollHeight;
+  }
+
+  /* ---------- التراجع خطوة ---------- */
+
+  // لقطة قبل كل اختيار: الحالة + عدد الرسائل، فيعود «رجوع» بها بلا آثار جانبية
+  function snapshot() {
+    history.push({ stage: stage, period: period, hours: hours, msgs: thread.children.length });
+  }
+
+  function goBack() {
+    if (!history.length) return;
+    clearTimers(); // وإلا وصلت رسالة مؤجّلة بعد الرجوع
+    hideTyping();
+    var s = history.pop();
+    while (thread.children.length > s.msgs) thread.removeChild(thread.lastChild);
+    stage = s.stage;
+    period = s.period;
+    hours = s.hours;
+    syncPeriod();
+    renderQuick();
+    toBottom();
   }
 
   /* ---------- الرسائل ---------- */
@@ -196,6 +225,9 @@
       ];
     }
 
+    // «رجوع» يظهر فقط متى وُجدت خطوة سابقة فعلًا
+    backBtn.style.display = history.length ? '' : 'none';
+
     qgrid.textContent = '';
     qgrid.className = 'rw-qr rw-qr-' + cols;
     for (var i = 0; i < items.length; i++) qgrid.appendChild(items[i]);
@@ -209,6 +241,7 @@
   }
 
   function pickPeriod(key) {
+    snapshot();
     period = key;
     stage = 'hours';
     syncPeriod();
@@ -218,6 +251,7 @@
   }
 
   function pickHours(val) {
+    snapshot();
     var p = D.periods[period];
     if (val === 'hour') {
       hours = 'hour';
@@ -240,6 +274,7 @@
   }
 
   function pickDur(key) {
+    snapshot();
     var p = D.periods[period];
     var pack = p.packs[hours];
     var d = null;
@@ -259,12 +294,15 @@
     clearTimers();
     hideTyping();
     thread.textContent = '';
+    history = [];
     stage = 'period';
     period = null;
     hours = null;
     addMsg('g', 'لا مشكلة، نبدأ من جديد. متى تحتاج حضور طفلك — الفترة الصباحية أم المسائية؟');
     renderQuick();
   }
+
+  backBtn.addEventListener('click', goBack);
 
   /* ---------- مخرج «أعرف ما أريد» ---------- */
 

@@ -52,7 +52,10 @@
 
 /* شريط الردود السريعة */
 #rw-baqat .rw-qbar{padding:16px 18px;background:#fff;border-top:2px solid #F0DECC}
-#rw-baqat .rw-qlabel{font-size:15px;font-weight:800;color:#4A323E;margin-bottom:10px}
+#rw-baqat .rw-qtop{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+#rw-baqat .rw-qlabel{font-size:15px;font-weight:800;color:#4A323E}
+#rw-baqat .rw-back{min-height:44px;padding:0 14px;border:2px solid #EAD9C6;border-radius:999px;background:#fff;display:inline-flex;align-items:center;flex-shrink:0;font-family:'Almarai',sans-serif;font-size:15px;font-weight:800;color:#941249;cursor:pointer;transition:background .18s,border-color .18s}
+#rw-baqat .rw-back:hover{background:#FBF2E7;border-color:#E8BD4B}
 #rw-baqat .rw-qr{display:grid;gap:10px}
 #rw-baqat .rw-qr-2{grid-template-columns:repeat(2,1fr)}
 #rw-baqat .rw-qr-3{grid-template-columns:repeat(3,1fr)}
