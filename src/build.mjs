@@ -74,26 +74,44 @@ const chatData = {
   wa: data.contact.whatsapp,
   hourLabel: data.periods.morning.hour.label,
   hourCap: HOUR_CAP,
-  durations: DURATIONS.map((d) => [d, data.durations[d], caption(d)]),
+  hourHint: data.hoursHints['1'],
+  durations: DURATIONS.map((d) => [d, data.durations[d], caption(d), data.durationHints[d]]),
+  compare: data.durationCompare,
+  guide: data.guide,
   periods: Object.fromEntries(
     [
-      ['m', data.periods.morning],
-      ['e', data.periods.evening],
-    ].map(([tag, p]) => [
-      tag,
-      {
-        label: p.label,
-        hour: { price: p.hour.price, url: p.hour.url },
-        packs: p.packages.map((pkg) => ({
-          label: pkg.label,
-          prices: Object.fromEntries(
-            DURATIONS.map((d) => [d, { price: pkg.prices[d].price, url: pkg.prices[d].url }])
-          ),
-        })),
-      },
-    ])
+      ['m', 'morning'],
+      ['e', 'evening'],
+    ].map(([tag, key]) => {
+      const p = data.periods[key];
+      return [
+        tag,
+        {
+          label: p.label,
+          hint: data.periodHints[key],
+          hour: { price: p.hour.price, url: p.hour.url },
+          packs: p.packages.map((pkg) => ({
+            hours: pkg.hours,
+            label: pkg.label,
+            hint: data.hoursHints[String(pkg.hours)],
+            prices: Object.fromEntries(
+              DURATIONS.map((d) => [d, { price: pkg.prices[d].price, url: pkg.prices[d].url }])
+            ),
+          })),
+        },
+      ];
+    })
   ),
 };
+
+// كل خيار في المحادثة يجب أن يحمل وصفًا بشريًا — بيانات ناقصة تعني زرًا أعرج
+for (const [tag, p] of Object.entries(chatData.periods)) {
+  if (!p.hint) throw new Error(`ينقص periodHints للفترة ${tag} في packages.json`);
+  for (const pkg of p.packs)
+    if (!pkg.hint) throw new Error(`ينقص hoursHints["${pkg.hours}"] في packages.json`);
+}
+for (const d of chatData.durations) if (!d[3]) throw new Error(`ينقص durationHints["${d[0]}"] في packages.json`);
+if (!chatData.hourHint) throw new Error('ينقص hoursHints["1"] في packages.json');
 
 // داخل <script type="application/json"> يكفي منع تسلسل </script — وتهريب < يغطيه
 const chatJson = JSON.stringify(chatData).replace(/</g, '\\u003c');
