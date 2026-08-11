@@ -169,8 +169,9 @@
     if (stage === 'period') {
       qlabel.textContent = 'اختر ردك:';
       items = [
-        qbtn(D.periods.m.label, 'من 6:45 صباحاً', 'gold', function () { pickPeriod('m'); }),
-        qbtn(D.periods.e.label, 'حتى 9 مساءً', 'dark', function () { pickPeriod('e'); })
+        // بلا سطر وقت تحت الاسم (قرار العميل) — الدوام يبقى في التذييل
+        qbtn(D.periods.m.label, null, 'gold', function () { pickPeriod('m'); }),
+        qbtn(D.periods.e.label, null, 'dark', function () { pickPeriod('e'); })
       ];
     } else if (stage === 'hours') {
       cols = 3;
