@@ -31,7 +31,6 @@
 #rw-baqat .rw-row-g{justify-content:flex-start}
 #rw-baqat .rw-row-u{justify-content:flex-end}
 #rw-baqat .rw-bub{max-width:84%}
-#rw-baqat .rw-bub-res{max-width:92%}
 #rw-baqat .rw-bub-g{background:#fff;border:2px solid #F0DECC;border-radius:22px;border-bottom-right-radius:8px;padding:16px 20px;box-shadow:0 6px 16px rgba(148,18,73,.06)}
 #rw-baqat .rw-bub-u{background:#D60859;border-radius:22px;border-bottom-left-radius:8px;padding:14px 20px;box-shadow:0 6px 16px rgba(214,8,89,.22)}
 #rw-baqat .rw-txt-g{font-family:'Almarai',sans-serif;font-weight:700;font-size:clamp(17px,3.6vw,19px);line-height:1.6;color:#2A1B22}
@@ -47,20 +46,12 @@
 #rw-baqat .rw-res-p{margin-top:8px;display:flex;align-items:baseline;justify-content:center;gap:7px;font-family:'Baloo Bhaijaan 2','Almarai',sans-serif;font-weight:800;font-size:46px;color:#2A1B22;line-height:1}
 #rw-baqat .rw-res-p span{font-family:'Almarai',sans-serif;font-size:18px;font-weight:700;color:#4A323E}
 #rw-baqat .rw-res-c{margin-top:4px;font-size:16px;font-weight:700;color:#4A323E}
-#rw-baqat .rw-res-s{margin-top:10px}
-#rw-baqat .rw-res-s-pill{display:inline-block;font-family:'Almarai',sans-serif;font-size:15px;font-weight:800;color:#941249;background:#fff;border:1.5px solid #E8BD4B;border-radius:999px;padding:6px 14px}
-#rw-baqat .rw-res-s-sub{margin-top:4px;font-family:'Almarai',sans-serif;font-size:13px;font-weight:700;color:#4A323E}
 #rw-baqat .rw-res-b{margin-top:16px;display:flex;align-items:center;justify-content:center;width:100%;min-height:62px;background:#D60859;color:#fff !important;border-radius:999px;font-weight:800;font-size:21px;text-decoration:none !important;box-shadow:0 8px 20px rgba(214,8,89,.3);transition:background .2s}
 #rw-baqat .rw-res-b:hover{background:#941249}
 #rw-baqat .rw-res-n{margin-top:8px;font-size:14px;font-weight:700;color:#4A323E}
 
 /* شريط الردود السريعة */
 #rw-baqat .rw-qbar{padding:16px 18px;background:#fff;border-top:2px solid #F0DECC}
-#rw-baqat .rw-qtop{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px}
-#rw-baqat .rw-step{font-family:'Almarai',sans-serif;font-size:13px;font-weight:800;color:#941249;background:#FBF2E7;border-radius:999px;padding:5px 12px}
-#rw-baqat .rw-qtools{display:flex;gap:4px}
-#rw-baqat .rw-qlink{min-height:44px;padding:0 10px;border-radius:12px;display:inline-flex;align-items:center;font-family:'Almarai',sans-serif;font-size:14px;font-weight:800;color:#941249;cursor:pointer;transition:background .18s}
-#rw-baqat .rw-qlink:hover{background:#FBF2E7}
 #rw-baqat .rw-qlabel{font-size:15px;font-weight:800;color:#4A323E;margin-bottom:10px}
 #rw-baqat .rw-qr{display:grid;gap:10px}
 #rw-baqat .rw-qr-2{grid-template-columns:repeat(2,1fr)}
@@ -70,7 +61,6 @@
 #rw-baqat .rw-q-gold{background:linear-gradient(165deg,#FFF7E8,#FFEBC7);color:#941249;border:2px solid #E8BD4B}
 #rw-baqat .rw-q-dark{background:linear-gradient(165deg,#941249,#5E0B30);color:#fff;border:2px solid #941249}
 #rw-baqat .rw-q-primary{background:#D60859;color:#fff;border:2px solid #D60859;box-shadow:0 6px 16px rgba(214,8,89,.22)}
-#rw-baqat .rw-q-save{font-family:'Almarai',sans-serif;font-size:13px;font-weight:800;color:#941249;background:#FFF7E8;border:1.5px solid #E8BD4B;border-radius:999px;padding:2px 10px;margin-top:4px}
 
 /* مخرج «أعرف ما أريد» */
 #rw-baqat .rw-allbtn{margin:18px auto 0;max-width:420px;width:100%;border:2px dashed #EAD9C6;background:#fff;border-radius:18px;min-height:56px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:800;font-size:17px;color:#941249}
@@ -105,16 +95,7 @@
 #rw-d-day:checked ~ .rw-wrap .rw-v-day,#rw-d-week:checked ~ .rw-wrap .rw-v-week,#rw-d-month:checked ~ .rw-wrap .rw-v-month,#rw-d-term:checked ~ .rw-wrap .rw-v-term{display:contents}
 
 @media (max-width:900px){#rw-baqat .rw-grid{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:600px){
-  #rw-baqat .rw-grid{grid-template-columns:1fr}
-  #rw-baqat .rw-qr-2,#rw-baqat .rw-qr-3{grid-template-columns:1fr}
-  /* على الجوال يُقصَّر المجرى ليصعد شريط الردود إلى داخل الشاشة (كانت 3 أزرار من 4 تحت الحافة) */
-  #rw-baqat .rw-thread{max-height:300px}
-  /* وبطاقة السعر تأخذ عرض الصف كاملًا بدل 84% ناقص الأفاتار
-     (flex:1 لأن الفقاعة عنصر مرن يتقلّص إلى مقاس محتواه بلا هذا) */
-  #rw-baqat .rw-bub-res{max-width:100%;flex:1 1 auto}
-  #rw-baqat .rw-row-res .rw-av{display:none}
-}
+@media (max-width:600px){#rw-baqat .rw-grid{grid-template-columns:1fr}#rw-baqat .rw-qr-2,#rw-baqat .rw-qr-3{grid-template-columns:1fr}}
 /* احترام تفضيل تقليل الحركة — ويمنع أيضًا بقاء المحتوى شفافًا لو لم تُشغَّل الحركة */
 @media (prefers-reduced-motion:reduce){#rw-baqat .rw-row,#rw-baqat .rw-q{animation:none}#rw-baqat .rw-tdot{animation:none;opacity:.6}}
 

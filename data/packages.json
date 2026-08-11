@@ -10,33 +10,6 @@
     "month": "الشهر",
     "term": "الترم"
   },
-  "periodHints": {
-    "morning": "من 6:45 صباحاً",
-    "evening": "حتى 9 مساءً"
-  },
-  "hoursHints": {
-    "1": "ارتباط سريع",
-    "4": "نصف يوم",
-    "5": "نصف يوم موسّع",
-    "6": "يوم دراسي كامل",
-    "8": "يوم عمل كامل",
-    "10": "دوام ممتد"
-  },
-  "durationHints": {
-    "day": "تجربة ليوم واحد",
-    "week": "خمسة أيام",
-    "month": "شهر كامل",
-    "term": "الفصل الدراسي — 4 أشهر"
-  },
-  "durationCompare": {
-    "week": { "count": 5, "per": "day", "label": "خمسة أيام" },
-    "month": { "count": 4, "per": "week", "label": "أربعة أسابيع" },
-    "term": { "count": 4, "per": "month", "label": "أربعة أشهر" }
-  },
-  "guide": {
-    "recommendedHours": 6,
-    "recommendedDuration": "month"
-  },
   "periods": {
     "morning": {
       "label": "الفترة الصباحية",
